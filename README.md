@@ -16,7 +16,6 @@ This minimalist, performance-optimized static portfolio combines a **3D WebGL In
 | **01. ISP Core & Failover** | [case-studies.html#mikrotik](https://sakib-hosen-dev.github.io/case-studies.html#mikrotik) | Dual-WAN BGP/OSPF failover (`<30ms` BFD) simulator, FTTH PPPoE concentrator, 802.1Q VLAN isolation, interactive PCQ bandwidth calculator, and production RouterOS v7 CLI runbooks |
 | **02. OpenWrt 25.12.6 (`apk`)** | [case-studies.html#openwrt](https://sakib-hosen-dev.github.io/case-studies.html#openwrt) | ASUS RT-AX52 (MediaTek MT7981B) edge deployment with Hardware Flow Offloading (HFO) vs. SQM CAKE toggle, Quad DoH, 480K+ OOM-safe AdBlock-Fast, One-Click Health Check, and ASUS TFTP Rescue |
 | **03. Mobile Admin & Telemetry** | [case-studies.html#openwrt-mobile](https://sakib-hosen-dev.github.io/case-studies.html#openwrt-mobile) | Smartphone-first management via Yet Another LuCI App, Argon Theme v2.4.3 Dark UI, OppsError404 suite, `vnstat2`/`nlbwmon`/`collectd`, and LAN-isolated `ttyd` & Prometheus telemetry |
-| **04. Hardware & Enterprise IT** | [case-studies.html#hardware](https://sakib-hosen-dev.github.io/case-studies.html#hardware) | Custom workstation assembly, thermal burn-in diagnostics, Kernel-Power stability troubleshooting, and enterprise Windows administration |
 
 ## Main Portfolio Sections (`index.html`)
 
