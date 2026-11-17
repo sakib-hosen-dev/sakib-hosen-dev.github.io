@@ -1,0 +1,25 @@
+{
+  "name": "Sakib Hosen | Network & Systems Support Engineer",
+  "short_name": "Sakib Hosen",
+  "description": "Portfolio of Sakib Hosen (MD Sakib Hosen) - Certified MTCNA & MTCRE Network & Systems Support Engineer.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#050811",
+  "theme_color": "#06b6d4",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

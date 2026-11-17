@@ -1,0 +1,1869 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sakib Hosen Case Studies (Md Sakib / MH Sakib) — MikroTik RouterOS v7 & OpenWrt 25</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    :root {
+      --bg-obsidian: #061024;
+      --bg-navy: #0f254e;
+      --hairline: rgba(148, 163, 184, 0.16);
+      --glass: rgba(8, 15, 32, 0.62);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      background-color: #061024;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background-color: #061024;
+      background-image: radial-gradient(circle at 50% 22%, #0f254e 0%, #081530 55%, #061024 100%);
+      background-attachment: fixed;
+      color: #f1f5f9;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow-x: hidden;
+    }
+
+    .glass-card {
+      position: relative;
+      overflow: hidden;
+      background: rgba(8, 14, 30, 0.46);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease, box-shadow 0.35s ease;
+    }
+    .glass-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(360px circle at var(--mx, 50%) var(--my, 50%), rgba(56, 189, 248, 0.14), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .glass-card:hover {
+      border-color: rgba(56, 189, 248, 0.42);
+      box-shadow: 0 22px 48px -18px rgba(14, 165, 233, 0.24);
+    }
+    .glass-card:hover::before {
+      opacity: 1;
+    }
+
+    @keyframes flowDash {
+      to { stroke-dashoffset: -24; }
+    }
+    .sim-flow-line {
+      stroke-dasharray: 6 6;
+      animation: flowDash 0.85s linear infinite;
+    }
+    .sim-node {
+      cursor: pointer;
+      transition: filter 0.22s ease;
+    }
+    .sim-node:hover {
+      filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.55));
+    }
+
+    .font-serif-display {
+      font-family: 'Instrument Serif', Georgia, serif;
+    }
+
+    .font-mono-tech {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+    }
+
+    .glass-bar {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      box-shadow: 0 20px 50px -15px rgba(2, 6, 23, 0.8), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .topo-bg {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Cg fill='none' stroke='rgba(148,163,184,0.06)' stroke-width='1'%3E%3Ccircle cx='200' cy='200' r='60'/%3E%3Ccircle cx='200' cy='200' r='105'/%3E%3Ccircle cx='200' cy='200' r='155'/%3E%3Ccircle cx='200' cy='200' r='210'/%3E%3Ccircle cx='200' cy='200' r='270'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: 420px 420px;
+    }
+
+    .study-pill {
+      transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .study-pill:hover {
+      border-color: rgba(56, 189, 248, 0.55);
+      transform: translateY(-1px);
+    }
+    .study-pill.is-active {
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      color: #020617;
+      border-color: transparent;
+      font-weight: 600;
+      box-shadow: 0 8px 24px -6px rgba(56, 189, 248, 0.55);
+    }
+
+    .subtab-btn {
+      transition: all 0.22s ease;
+    }
+    .subtab-btn.is-active {
+      background: rgba(56, 189, 248, 0.18);
+      border-color: #38bdf8;
+      color: #38bdf8;
+      font-weight: 600;
+    }
+
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-panel {
+      animation: fadeSlideIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    /* === SYNCED WITH MAIN PORTFOLIO: Two-Tier Tablet/Phone Dock, Minimalist Glass & 60fps Performance === */
+    .header-dock-shell {
+      position: relative;
+      background: linear-gradient(135deg, rgba(10, 20, 44, 0.80), rgba(6, 12, 28, 0.88));
+      backdrop-filter: blur(22px) saturate(160%);
+      -webkit-backdrop-filter: blur(22px) saturate(160%);
+      border: 1px solid rgba(56, 189, 248, 0.24);
+      box-shadow: 0 20px 50px rgba(2, 6, 23, 0.78), 0 0 24px rgba(56, 189, 248, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      transition: all 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .sh-badge-ring {
+      position: relative;
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+    }
+    .group:hover .sh-badge-ring {
+      transform: scale(1.08) rotate(-4deg);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+    }
+
+    @media (max-width: 1220px) {
+      .header-dock-shell {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        border-radius: 1.35rem !important;
+        padding: 0.65rem 0.85rem 0.6rem !important;
+        gap: 0.55rem !important;
+      }
+      .header-upper-row {
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding: 0.1rem 0.25rem 0.5rem !important;
+        border-bottom: 1px solid rgba(56, 189, 248, 0.16);
+      }
+      #study-switcher {
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        border-radius: 0.95rem !important;
+        padding: 4px !important;
+        background: rgba(3, 8, 20, 0.78) !important;
+      }
+    }
+
+    @media (min-width: 1221px) {
+      .header-dock-shell {
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        border-radius: 9999px !important;
+        padding: 0.55rem 1.15rem !important;
+      }
+      .header-upper-row {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.75rem !important;
+      }
+      #study-switcher {
+        background: rgba(4, 9, 22, 0.65);
+        border: 1px solid rgba(148, 163, 184, 0.14);
+        padding: 4px;
+        border-radius: 9999px;
+      }
+    }
+
+    .glass-card {
+      background: rgba(7, 14, 30, 0.46) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border: 1px solid rgba(148, 163, 184, 0.14) !important;
+      contain: layout style;
+    }
+    #webgl-canvas {
+      will-change: transform, opacity;
+    }
+
+  </style>
+  <link rel="canonical" href="https://sakib-hosen-dev.github.io/case-studies.html" />
+  <meta name="author" content="Md Sakib Hosen (Sakib Hosen / MH Sakib)" />
+  <meta name="description" content="Live interactive network case studies by Md Sakib Hosen (Sakib Hosen / MD Sakib / MH Sakib): MikroTik RouterOS v7 BFD failover, OpenWrt 25.12.6, and Mobile LuCI Telemetry." />
+  <meta name="keywords" content="Sakib Hosen Case Studies, MD Sakib Network, MH Sakib OpenWrt, Md Sakib Hosen MTCNA, MikroTik BFD, OpenWrt 25.12.6" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="yandex-verification" content="9bbd50a5fc897023" />
+  <meta name="ahrefs-site-verification" content="ANjMf+jgVWXbpHIar4BpUA" />
+  <meta property="og:type" content="profile" />
+  <meta property="og:site_name" content="Sakib Hosen — Network & Systems Engineer" />
+  <meta property="og:url" content="https://sakib-hosen-dev.github.io/case-studies.html" />
+  <meta property="og:title" content="Sakib Hosen Case Studies (Md Sakib / MH Sakib) — MikroTik RouterOS v7 & OpenWrt 25" />
+  <meta property="og:description" content="Live interactive network case studies by Md Sakib Hosen (Sakib Hosen / MD Sakib / MH Sakib): MikroTik RouterOS v7 BFD failover, OpenWrt 25.12.6, and Mobile LuCI Telemetry." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Sakib Hosen Case Studies (Md Sakib / MH Sakib) — MikroTik RouterOS v7 & OpenWrt 25" />
+  <meta name="twitter:description" content="Live interactive network case studies by Md Sakib Hosen (Sakib Hosen / MD Sakib / MH Sakib): MikroTik RouterOS v7 BFD failover, OpenWrt 25.12.6, and Mobile LuCI Telemetry." />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://sakib-hosen-dev.github.io/#person",
+      "name": "Sakib Hosen",
+      "givenName": "Sakib",
+      "familyName": "Hosen",
+      "alternateName": [
+        "MD Sakib Hosen",
+        "Sakib Hosen",
+        "MD Sakib",
+        "MH Sakib",
+        "Sakib",
+        "zero-sakib",
+        "zero.mh.sakib"
+      ],
+      "url": "https://sakib-hosen-dev.github.io/",
+      "email": "mailto:md.sakibhosen003@gmail.com",
+      "telephone": "+8801988169636",
+      "jobTitle": "Network & Systems Support Engineer",
+      "description": "Md Sakib Hosen (Sakib Hosen / MD Sakib / MH Sakib) is a MikroTik MTCNA & MTCRE certified Network Engineer, IT Support Level-3 Lead Technical Trainer, OpenWrt 25 firmware specialist, and Hardware Engineer based in Dhaka, Bangladesh.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Dhaka",
+        "addressCountry": "BD"
+      },
+      "sameAs": [
+        "https://github.com/Md-Sakib-Hosen",
+        "https://www.linkedin.com/in/zero-sakib",
+        "https://t.me/zero_mh_sakib"
+      ],
+      "knowsAbout": [
+        "MikroTik RouterOS v7",
+        "MTCNA",
+        "MTCRE",
+        "OpenWrt 25.12.6",
+        "BFD Failover",
+        "PPPoE & PCQ Queuing",
+        "Data Center Operations",
+        "Workstation Hardware Engineering",
+        "SQM CAKE & AdBlock-Fast",
+        "Artificial Intelligence",
+        "Automation",
+        "DaVinci Resolve",
+        "Video Editing"
+      ],
+      "hasCredential": [
+        {
+          "@type": "EducationalOccupationalCredential",
+          "name": "MikroTik Certified Network Associate (MTCNA)",
+          "credentialCategory": "certification"
+        },
+        {
+          "@type": "EducationalOccupationalCredential",
+          "name": "MikroTik Certified Routing Engineer (MTCRE)",
+          "credentialCategory": "certification"
+        },
+        {
+          "@type": "EducationalOccupationalCredential",
+          "name": "Certified IT Support Service Level-3 Lead Technical Trainer",
+          "credentialCategory": "certification"
+        }
+      ],
+      "alumniOf": {
+        "@type": "EducationalOrganization",
+        "name": "Graphic Arts Institute, Dhaka"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://sakib-hosen-dev.github.io/#website",
+      "url": "https://sakib-hosen-dev.github.io/",
+      "name": "Sakib Hosen \u2014 Md Sakib Hosen Portfolio",
+      "alternateName": [
+        "MD Sakib Hosen",
+        "MD Sakib Portfolio",
+        "MH Sakib Portfolio",
+        "Sakib Network Engineer"
+      ],
+      "publisher": {
+        "@id": "https://sakib-hosen-dev.github.io/#person"
+      }
+    }
+  ]
+}
+  </script>
+    <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon.png" />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" href="assets/favicon.png" />
+  <link rel="me" href="https://github.com/Md-Sakib-Hosen" />
+  <link rel="me" href="https://www.linkedin.com/in/zero-sakib/" />
+  <link rel="me" href="https://www.facebook.com/zero.mh.sakib" />
+  <link rel="me" href="https://t.me/zero_mh_sakib" />
+  <link rel="me" href="https://x.com/iam_sakib_hosen" />
+  <meta property="og:image" content="https://sakib-hosen-dev.github.io/assets/og-image.jpg?v=2" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@iam_sakib_hosen" />
+  <meta name="twitter:image" content="https://sakib-hosen-dev.github.io/assets/og-image.jpg?v=2" />
+</head>
+<body class="antialiased selection:bg-sky-500/30 selection:text-white">
+
+  <!-- Persistent Three.js 3D Infinity <-> Mobius Strip Background -->
+  <canvas id="webgl-canvas" class="fixed inset-0 -z-10 h-full w-full pointer-events-none"></canvas>
+
+  <!-- Top Header -->
+  <header class="sticky top-0 z-40 px-2.5 sm:px-6 pt-2.5 sm:pt-3.5">
+    <div class="header-dock-shell mx-auto max-w-7xl flex items-center justify-between gap-3">
+      <div class="header-upper-row min-w-0">
+        <a href="https://sakib-hosen-dev.github.io/" class="flex items-center gap-2.5 sm:gap-3 min-w-0 group pl-0.5">
+          <div class="sh-badge-ring relative h-9 w-9 sm:h-10 sm:w-10 rounded-full border border-sky-400/60 bg-gradient-to-br from-sky-500/30 via-[#0a1936] to-indigo-500/25 flex items-center justify-center shrink-0 shadow-[0_0_16px_rgba(56,189,248,0.28)]">
+            <img src="data:image/webp;base64,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" decoding="async" alt="Md Sakib Hosen" class="h-full w-full rounded-full object-cover object-top select-none pointer-events-none" />
+            <span class="absolute -bottom-0.5 -right-0.5 z-10 h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-emerald-400 ring-2 ring-[#050a18] animate-pulse"></span>
+          </div>
+          <div class="min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <p class="text-[13px] sm:text-sm font-semibold text-white tracking-tight group-hover:text-sky-200 transition-colors whitespace-nowrap">Sakib Hosen</p>
+              <span class="hidden xl:inline-block rounded-full bg-emerald-500/15 border border-emerald-400/35 px-2.5 py-0.5 font-mono-tech text-[10px] font-medium text-emerald-300 whitespace-nowrap">MTCNA &bull; MTCRE</span>
+            </div>
+            <p class="text-[11px] sm:text-xs text-slate-300/90 font-normal whitespace-nowrap">Network &amp; Systems Engineer &bull; Live Lab</p>
+          </div>
+        </a>
+
+        <div class="flex items-center gap-2 xl:hidden shrink-0">
+          <span class="rounded-full bg-emerald-500/15 border border-emerald-400/35 px-2.5 py-1 font-mono-tech text-[10px] font-medium text-emerald-300 whitespace-nowrap">MTCNA &bull; MTCRE</span>
+        </div>
+      </div>
+
+      <div id="study-switcher" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+        <!-- 3 Case Study Pills injected by JS -->
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Interactive Case Study Stage -->
+  <main class="topo-bg mx-auto max-w-6xl px-4 sm:px-8 py-8 space-y-6">
+
+    <!-- Hero Summary + Hardware Card -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+      <div class="lg:col-span-7 glass-card rounded-3xl p-6 sm:p-8 flex flex-col justify-between">
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span id="cs-index" class="font-mono-tech text-xs uppercase tracking-wider text-sky-400">CASE STUDY 01 // ISP CORE &amp; FAILOVER</span>
+            <span id="cs-status" class="rounded-full bg-emerald-500/15 border border-emerald-400/30 px-3 py-0.5 font-mono-tech text-[11px] text-emerald-300"></span>
+            <span id="cs-env" class="rounded-full bg-sky-500/10 border border-sky-400/25 px-3 py-0.5 font-mono-tech text-[11px] text-sky-300"></span>
+          </div>
+
+          <h1 id="cs-title" class="mt-4 font-serif-display text-4xl sm:text-5xl text-white leading-tight"></h1>
+          <p id="cs-summary" class="mt-2.5 text-sm font-medium text-sky-200/90 leading-relaxed"></p>
+          <p id="cs-details" class="mt-2.5 text-xs sm:text-sm text-slate-300 leading-relaxed"></p>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-slate-800/80">
+          <p class="font-mono-tech text-[10px] uppercase tracking-wider text-slate-400 mb-2.5">Verified Engineering Benchmarks</p>
+          <div id="cs-metrics" class="flex flex-wrap gap-2"></div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-5 glass-card rounded-3xl p-6 flex flex-col justify-between">
+        <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-800/80">
+          <span class="font-mono-tech text-xs uppercase tracking-wider text-sky-400">Architectural Decisions</span>
+          <span id="cs-hw-tag" class="font-mono-tech text-[11px] text-slate-300"></span>
+        </div>
+        <ul id="cs-arch-points" class="my-4 space-y-3 text-xs sm:text-sm text-slate-200"></ul>
+        <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono-tech text-slate-400">
+          <span>Interactive Lab Mode</span>
+          <button id="cs-copy-main-btn" type="button" class="rounded-full border border-sky-400/35 bg-sky-500/10 px-3 py-1 text-sky-300 hover:bg-sky-500/25 transition">
+            Copy Production Config
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sub-Navigation Tabs -->
+    <section class="glass-bar rounded-3xl p-5 sm:p-7">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80 pb-4">
+        <div id="subtab-bar" class="flex flex-wrap gap-2">
+          <button type="button" data-subtab="simulator" class="subtab-btn is-active rounded-full border border-slate-700/80 bg-slate-900/60 px-4 py-1.5 font-mono-tech text-xs text-slate-300">
+            01 // Live Topology Simulator &amp; Calculator
+          </button>
+          <button type="button" data-subtab="cli" class="subtab-btn rounded-full border border-slate-700/80 bg-slate-900/60 px-4 py-1.5 font-mono-tech text-xs text-slate-300">
+            02 // Multi-Phase CLI &amp; Runbook
+          </button>
+          <button type="button" data-subtab="telemetry" class="subtab-btn rounded-full border border-slate-700/80 bg-slate-900/60 px-4 py-1.5 font-mono-tech text-xs text-slate-300">
+            03 // Telemetry &amp; Verification
+          </button>
+        </div>
+        <span class="font-mono-tech text-[11px] text-slate-400">All 3 Case Studies Live &amp; Interactive</span>
+      </div>
+
+      <!-- Panel 1: Live Simulator + Interactive Parameter Calculator -->
+      <div id="panel-simulator" class="mt-6 space-y-6 animate-panel">
+        <!-- Topology Simulator -->
+        <div class="rounded-2xl border border-slate-800/90 bg-slate-950/75 p-5">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <span class="font-mono-tech text-xs uppercase tracking-wider text-sky-400">Interactive Topology State Simulator</span>
+            <button id="sim-cycle-btn" type="button" class="rounded-full border border-emerald-400/35 bg-emerald-500/10 px-3 py-1 font-mono-tech text-[11px] text-emerald-300 hover:bg-emerald-500/20 hover:border-emerald-400/70 transition flex items-center gap-1.5 cursor-pointer">
+              <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>Click Mode to Simulate Live State</span>
+              <span class="text-sky-300">&rarr;</span>
+            </button>
+          </div>
+
+          <div id="sim-buttons" class="flex flex-wrap gap-2 mb-4"></div>
+          <div id="sim-svg" class="w-full overflow-x-auto py-1"></div>
+
+          <div class="mt-4 pt-4 border-t border-slate-800/80 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="rounded-xl border border-slate-800/90 bg-slate-900/60 px-4 py-3">
+              <p class="font-mono-tech text-[10px] uppercase tracking-wider text-slate-400">Active Path / Mode</p>
+              <p id="sim-val-a" class="mt-1 font-mono-tech text-xs font-semibold text-sky-300"></p>
+            </div>
+            <div class="rounded-xl border border-slate-800/90 bg-slate-900/60 px-4 py-3">
+              <p class="font-mono-tech text-[10px] uppercase tracking-wider text-slate-400">Engine / Link Telemetry</p>
+              <p id="sim-val-b" class="mt-1 font-mono-tech text-xs font-semibold text-emerald-300"></p>
+            </div>
+            <div class="sm:col-span-2 rounded-xl border border-slate-800/90 bg-[#030712] px-4 py-2.5 font-mono-tech text-xs text-slate-300 flex items-center gap-2">
+              <span class="text-sky-400 shrink-0">syslog &gt;</span>
+              <span id="sim-log" class="truncate text-emerald-300"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Real-Time Parameter Calculator & Script Generator -->
+        <div class="rounded-2xl border border-sky-500/25 bg-slate-950/80 p-5 sm:p-6">
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-800/80">
+            <div>
+              <span class="font-mono-tech text-[10px] uppercase tracking-widest text-sky-400">Live Parameter Workbench</span>
+              <h2 id="calc-title" class="mt-0.5 font-serif-display text-2xl sm:text-3xl text-white"></h2>
+            </div>
+            <button id="calc-copy-btn" type="button" class="rounded-full border border-sky-400/40 bg-sky-500/15 px-4 py-1.5 font-mono-tech text-xs font-medium text-sky-300 hover:bg-sky-500 hover:text-slate-950 transition">
+              Copy Generated Script
+            </button>
+          </div>
+
+          <div class="mt-5 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            <div class="lg:col-span-5 space-y-4">
+              <div id="calc-controls" class="space-y-4"></div>
+              <div id="calc-kpis" class="grid grid-cols-2 gap-3 pt-2"></div>
+            </div>
+            <div class="lg:col-span-7 rounded-xl border border-slate-800/90 bg-[#030712] p-4">
+              <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-800/80">
+                <span id="calc-script-label" class="font-mono-tech text-[11px] text-emerald-300"></span>
+                <span class="font-mono-tech text-[10px] text-slate-400">Updates in real time</span>
+              </div>
+              <pre id="calc-output" class="font-mono-tech text-xs text-sky-200 whitespace-pre-wrap break-words leading-relaxed max-h-64 overflow-y-auto"></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 2: Multi-Phase CLI & Runbook -->
+      <div id="panel-cli" class="hidden mt-6 grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch animate-panel">
+        <div class="lg:col-span-8 rounded-2xl border border-slate-800/90 bg-[#030712] p-5">
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-800/80">
+            <div class="flex items-center gap-2">
+              <span class="h-2.5 w-2.5 rounded-full bg-emerald-400"></span>
+              <span id="cli-filename" class="font-mono-tech text-xs text-sky-300"></span>
+            </div>
+            <button id="cli-copy-btn" type="button" class="rounded-full border border-sky-400/35 bg-sky-500/10 px-3 py-1 font-mono-tech text-[11px] text-sky-300 hover:bg-sky-500/25 transition">
+              Copy Snippet
+            </button>
+          </div>
+          <div id="phase-tabs" class="flex flex-wrap gap-2 mb-4"></div>
+          <pre id="cli-code" class="font-mono-tech text-xs text-sky-200 whitespace-pre-wrap break-words leading-relaxed"></pre>
+        </div>
+
+        <div class="lg:col-span-4 rounded-2xl border border-slate-800/90 bg-slate-950/60 p-5 flex flex-col justify-between">
+          <div>
+            <h3 class="font-mono-tech text-xs uppercase tracking-wider text-emerald-300 mb-3">Implementation Runbook</h3>
+            <ol id="runbook-steps" class="space-y-3 text-xs sm:text-sm text-slate-200 list-decimal list-inside"></ol>
+          </div>
+          <p class="mt-5 pt-3 border-t border-slate-800/80 font-mono-tech text-[11px] text-slate-400">
+            Tested for zero-packet-drop cutover and OOM safety.
+          </p>
+        </div>
+      </div>
+
+      <!-- Panel 3: Telemetry & Verification -->
+      <div id="panel-telemetry" class="hidden mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 animate-panel"></div>
+
+      <!-- Footer Prev / Next -->
+      <div class="mt-6 pt-4 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
+        <button id="prev-study-btn" type="button" class="rounded-full border border-slate-700 bg-slate-900/70 px-4 py-2 text-xs font-medium text-slate-200 hover:border-sky-400 hover:text-white transition">
+          &larr; Previous Case Study
+        </button>
+        <span id="footer-status" class="font-mono-tech text-xs text-slate-400">Case Study 01 of 03</span>
+        <button id="next-study-btn" type="button" class="rounded-full bg-sky-500 px-5 py-2 text-xs font-semibold text-slate-950 hover:bg-sky-400 transition">
+          Next Case Study &rarr;
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 transition-opacity duration-300">
+    <div id="toast-msg" class="glass-bar rounded-full px-5 py-2.5 text-xs font-medium text-white shadow-xl"></div>
+  </div>
+
+  <script>
+    const STUDIES = [
+      {
+        id: "mikrotik-core",
+        num: "01",
+        shortTab: "01 • MikroTik RouterOS v7",
+        category: "ISP Core & Failover",
+        statusBadge: "< 30 ms BFD Failover",
+        envBadge: "Earth Telecom Practical Lab",
+        hwTag: "RouterOS v7.16 • Dual-WAN BFD",
+        title: "MikroTik RouterOS v7 Core",
+        summary: "Dual-WAN BGP/OSPF failover, 240+ FTTH PPPoE sessions & PCQ fair-share queuing.",
+        details: "Engineered a multi-router ISP edge and FTTH subscriber distribution testbench on RouterOS v7 combining 3×10ms Bidirectional Forwarding Detection (BFD), 1480 MTU TCP-MSS clamping, and deterministic PCQ bandwidth trees.",
+        metrics: ["< 30 ms BFD Failover", "240+ PPPoE Sessions", "-18.5 dBm Optical SLA", "1480 MTU / 1440 MSS"],
+        archPoints: [
+          "Replaced legacy 3-second ping-check scripts with 3×10ms hardware-assisted BFD sessions for sub-30ms upstream cutover.",
+          "Isolated PPPoE subscriber pools per VLAN with PCQ dst/src classifiers so heavy downloads never starve VoIP or real-time packets.",
+          "Enforced TCP SYN MSS clamping (1440 bytes) across all PPPoE interfaces to eliminate silent PMTUD blackholes."
+        ],
+        simModes: [
+          {
+            label: "Normal Dual-WAN Active",
+            valA: "ISP-A Primary (10G SFP+) • Distance 1",
+            valB: "BFD State: Up (10ms × 3) • 240 PPPoE Active",
+            log: "bfd,info peer=10.10.1.1 state=up tx=10ms rx=10ms | primary-wan=ether1",
+            svg: `<svg viewBox="0 0 680 190" class="w-full h-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="16" y="20" width="165" height="58" rx="12" fill="#081226" stroke="#38bdf8" stroke-width="1.6"/>
+              <text x="98" y="45" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="11" font-weight="600">Upstream ISP-A</text>
+              <text x="98" y="63" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="9">ACTIVE • 10G SFP+</text>
+              <rect x="16" y="112" width="165" height="58" rx="12" fill="#081226" stroke="#64748b" stroke-width="1.4"/>
+              <text x="98" y="137" text-anchor="middle" fill="#cbd5e1" font-family="JetBrains Mono" font-size="11" font-weight="600">Upstream ISP-B</text>
+              <text x="98" y="155" text-anchor="middle" fill="#818cf8" font-family="JetBrains Mono" font-size="9">STANDBY • BFD Ready</text>
+              <path d="M181 49 L250 95" class="sim-flow-line" stroke="#34d399" stroke-width="2.5"/>
+              <path d="M181 141 L250 95" stroke="#64748b" stroke-width="1.5" stroke-dasharray="5 4"/>
+              <rect x="250" y="38" width="180" height="114" rx="14" fill="#0c1b38" stroke="#38bdf8" stroke-width="2"/>
+              <text x="340" y="72" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="12" font-weight="700">MikroTik Core v7</text>
+              <text x="340" y="95" text-anchor="middle" fill="#38bdf8" font-family="JetBrains Mono" font-size="10">PPPoE + PCQ Queues</text>
+              <text x="340" y="116" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="9">MSS 1440 • FastTrack</text>
+              <path d="M430 95 L500 95" class="sim-flow-line" stroke="#38bdf8" stroke-width="2.5"/>
+              <rect x="500" y="45" width="164" height="100" rx="12" fill="#081226" stroke="#34d399" stroke-width="1.6"/>
+              <text x="582" y="78" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="11" font-weight="600">OLT &amp; FTTH Pool</text>
+              <text x="582" y="98" text-anchor="middle" fill="#38bdf8" font-family="JetBrains Mono" font-size="9">240+ Active Sessions</text>
+              <text x="582" y="116" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="9">-18.5 dBm Optical SLA</text>
+            </svg>`
+          },
+          {
+            label: "Simulate BFD Fiber Cut",
+            valA: "ISP-B Backup Active (< 30 ms Cutover)",
+            valB: "ISP-A Down • 0 Dropped PPPoE Sessions",
+            log: "bfd,warning peer=10.10.1.1 state=down (28ms) -> route=isp-b active",
+            svg: `<svg viewBox="0 0 680 190" class="w-full h-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="16" y="20" width="165" height="58" rx="12" fill="#1e0b14" stroke="#f43f5e" stroke-width="1.6"/>
+              <text x="98" y="45" text-anchor="middle" fill="#fda4af" font-family="JetBrains Mono" font-size="11" font-weight="600">Upstream ISP-A</text>
+              <text x="98" y="63" text-anchor="middle" fill="#f43f5e" font-family="JetBrains Mono" font-size="9">FIBER CUT • BFD DOWN</text>
+              <rect x="16" y="112" width="165" height="58" rx="12" fill="#081226" stroke="#34d399" stroke-width="2"/>
+              <text x="98" y="137" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="11" font-weight="600">Upstream ISP-B</text>
+              <text x="98" y="155" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="9">FAILOVER ACTIVE (28ms)</text>
+              <path d="M181 49 L250 95" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="4 4"/>
+              <path d="M181 141 L250 95" class="sim-flow-line" stroke="#34d399" stroke-width="2.5"/>
+              <rect x="250" y="38" width="180" height="114" rx="14" fill="#0c1b38" stroke="#34d399" stroke-width="2"/>
+              <text x="340" y="72" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="12" font-weight="700">MikroTik Core v7</text>
+              <text x="340" y="95" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="10">Route Re-converged</text>
+              <text x="340" y="116" text-anchor="middle" fill="#38bdf8" font-family="JetBrains Mono" font-size="9">0 PPPoE Drops</text>
+              <path d="M430 95 L500 95" class="sim-flow-line" stroke="#34d399" stroke-width="2.5"/>
+              <rect x="500" y="45" width="164" height="100" rx="12" fill="#081226" stroke="#34d399" stroke-width="1.6"/>
+              <text x="582" y="78" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="11" font-weight="600">OLT &amp; FTTH Pool</text>
+              <text x="582" y="98" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="9">240+ Sessions Online</text>
+              <text x="582" y="116" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="9">VoIP/ICMP Uninterrupted</text>
+            </svg>`
+          },
+          {
+            label: "PCQ Fair-Share Stress",
+            valA: "PCQ Classifier: dst-address / src-address",
+            valB: "Per-Subscriber Cap Enforced • 0 Starvation",
+            log: "queue,info pcq-down=50M pcq-up=50M active-substreams=240 avg-jitter=1.4ms",
+            svg: `<svg viewBox="0 0 680 190" class="w-full h-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="16" y="45" width="165" height="100" rx="12" fill="#081226" stroke="#818cf8" stroke-width="1.6"/>
+              <text x="98" y="78" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="11" font-weight="600">10G Uplink</text>
+              <text x="98" y="98" text-anchor="middle" fill="#a5b4fc" font-family="JetBrains Mono" font-size="9">Burst Load: 9.2 Gbps</text>
+              <text x="98" y="116" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="9">QoS Priority Active</text>
+              <path d="M181 95 L250 95" class="sim-flow-line" stroke="#818cf8" stroke-width="2.5"/>
+              <rect x="250" y="38" width="180" height="114" rx="14" fill="#0c1b38" stroke="#818cf8" stroke-width="2"/>
+              <text x="340" y="72" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="12" font-weight="700">PCQ Queue Tree</text>
+              <text x="340" y="95" text-anchor="middle" fill="#a5b4fc" font-family="JetBrains Mono" font-size="10">dst-address / src-address</text>
+              <text x="340" y="116" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="9">1.4ms Avg Jitter</text>
+              <path d="M430 95 L500 95" class="sim-flow-line" stroke="#34d399" stroke-width="2.5"/>
+              <rect x="500" y="45" width="164" height="100" rx="12" fill="#081226" stroke="#34d399" stroke-width="1.6"/>
+              <text x="582" y="78" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="11" font-weight="600">240 Subscribers</text>
+              <text x="582" y="98" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="9">Fair-Share Locked</text>
+              <text x="582" y="116" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="9">Zero VoIP Starvation</text>
+            </svg>`
+          }
+        ],
+        calcTitle: "MikroTik BFD & PCQ Queue Calculator",
+        calcScriptLabel: "Generated RouterOS v7 Script",
+        sliders: [
+          { id: "bfdInterval", label: "BFD TX/RX Interval", min: 10, max: 100, step: 5, val: 10, unit: " ms" },
+          { id: "bfdMult", label: "BFD Multiplier", min: 2, max: 5, step: 1, val: 3, unit: "×" },
+          { id: "pcqRate", label: "PCQ Subscriber Cap", min: 10, max: 200, step: 10, val: 50, unit: " Mbps" },
+          { id: "subs", label: "Active PPPoE Substreams", min: 50, max: 500, step: 10, val: 240, unit: "" }
+        ],
+        compute(st) {
+          const failoverMs = st.bfdInterval * st.bfdMult;
+          const totalQueue = st.subs * 50;
+          const mss = 1440;
+          return {
+            kpis: [
+              { label: "BFD Failover Time", val: `${failoverMs} ms` },
+              { label: "PCQ Total Limit", val: `${totalQueue} KiB` },
+              { label: "PPPoE / MSS", val: `1480 / ${mss}` },
+              { label: "Per-User Rate", val: `${st.pcqRate} Mbps` }
+            ],
+            code: `/routing bfd configuration
+add interfaces=ether1-isp-a min-rx=${st.bfdInterval}ms min-tx=${st.bfdInterval}ms multiplier=${st.bfdMult}
+
+/queue type
+add name="PCQ-Down-${st.pcqRate}M" kind=pcq pcq-rate=${st.pcqRate}M pcq-classifier=dst-address pcq-total-limit=${totalQueue}KiB
+add name="PCQ-Up-${st.pcqRate}M" kind=pcq pcq-rate=${st.pcqRate}M pcq-classifier=src-address pcq-total-limit=${totalQueue}KiB
+
+/ip firewall mangle
+add chain=forward protocol=tcp tcp-flags=syn tcp-mss=1441-65535 action=change-mss new-mss=${mss}`
+          };
+        },
+        phases: [
+          {
+            tab: "01 • BFD Failover Core",
+            filename: "01-mikrotik-bfd-failover.rsc",
+            code: `/routing bfd configuration
+add interfaces=ether1-isp-a,ether2-isp-b min-rx=10ms min-tx=10ms multiplier=3
+/ip route
+add dst-address=0.0.0.0/0 gateway=10.10.1.1 check-gateway=bfd distance=1
+add dst-address=0.0.0.0/0 gateway=10.20.1.1 check-gateway=bfd distance=2`
+          },
+          {
+            tab: "02 • PPPoE & MSS Clamp",
+            filename: "02-pppoe-mss-clamp.rsc",
+            code: `/interface pppoe-server server
+add service-name=FTTH-Core interface=bridge-vlan100 max-mtu=1480 max-mru=1480 authentication=pap,chap,mschap2
+/ip firewall mangle
+add chain=forward protocol=tcp tcp-flags=syn tcp-mss=1441-65535 action=change-mss new-mss=1440`
+          },
+          {
+            tab: "03 • PCQ Fair-Share",
+            filename: "03-pcq-fair-share.rsc",
+            code: `/queue type
+add name="PCQ-Down-50M" kind=pcq pcq-rate=50M pcq-classifier=dst-address pcq-total-limit=12000KiB
+add name="PCQ-Up-50M" kind=pcq pcq-rate=50M pcq-classifier=src-address pcq-total-limit=12000KiB`
+          }
+        ],
+        runbookSteps: [
+          "Provision BFD peers across primary and secondary ISP uplinks (10ms × 3).",
+          "Verify PPPoE server MTU/MRU = 1480 and apply TCP SYN MSS clamping at 1440.",
+          "Attach PCQ download/upload queue trees per subscriber VLAN pool.",
+          "Simulate primary fiber disconnect and confirm < 30ms cutover with zero session drops."
+        ],
+        benchmarks: [
+          { label: "BFD Cutover Latency", val: "< 30 ms", note: "Hardware-assisted 3×10ms detection replaces 3,000ms legacy ping scripts." },
+          { label: "PPPoE Concurrency", val: "240+ Active", note: "Zero session drops during simulated upstream failover testing." },
+          { label: "Optical Signal Margin", val: "-18.5 dBm", note: "Maintained within carrier FTTH optical budget across distribution links." }
+        ]
+      },
+      {
+        id: "openwrt-25",
+        num: "02",
+        shortTab: "02 • OpenWrt 25.12.6 (APK)",
+        category: "OpenWrt 25.12.6 (APK)",
+        statusBadge: "480K+ OOM-Safe Rules",
+        envBadge: "ASUS RT-AX52 • MT7981B SoC",
+        hwTag: "OpenWrt 25.12.6 • APK Manager",
+        title: "OpenWrt 25.12.6 Edge Stack",
+        summary: "Zero-bloat ASUS RT-AX52 architecture with HFO/SQM toggle, Quad DoH & 480K+ DNS filtering.",
+        details: "Hardened personal router stack running OpenWrt 25.12.6 with the new apk package manager, 4-provider Quad DNS-over-HTTPS, OOM-safe adblock-fast filtering, and deterministic ASUS TFTP rescue recovery.",
+        metrics: ["480K+ Domains Blocked", "APK Package Manager", "HFO vs SQM Toggle", "TFTP Rescue Ready"],
+        archPoints: [
+          "Migrated package provisioning cleanly to OpenWrt 25.12.6 apk with GNU gawk, grep, sed, and coreutils-sort dependencies.",
+          "Split traffic modes between Hardware Flow Offloading (HFO) for gigabit throughput and SQM CAKE for zero-bufferbloat gaming.",
+          "Pinned HaGeZi-Light & StevenBlack raw GitHub feeds into adblock-fast with OOM-safe memory ceilings on 256MB RAM."
+        ],
+        simModes: [
+          {
+            label: "HFO Mode (Gigabit Offload)",
+            valA: "Hardware Flow Offloading (MT7981B PPE)",
+            valB: "Throughput: 940 Mbps • CPU Load: < 8%",
+            log: "nftables,info flowtable_offload=enabled ppe=mt7981b cpu_load=6%",
+            svg: `<svg viewBox="0 0 680 190" class="w-full h-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="16" y="45" width="165" height="100" rx="12" fill="#081226" stroke="#38bdf8" stroke-width="1.6"/>
+              <text x="98" y="78" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="11" font-weight="600">WAN + Quad DoH</text>
+              <text x="98" y="98" text-anchor="middle" fill="#38bdf8" font-family="JetBrains Mono" font-size="9">4× https-dns-proxy</text>
+              <text x="98" y="116" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="9">480K+ Blocked</text>
+              <path d="M181 95 L250 95" class="sim-flow-line" stroke="#38bdf8" stroke-width="2.5"/>
+              <rect x="250" y="38" width="180" height="114" rx="14" fill="#0c1b38" stroke="#38bdf8" stroke-width="2"/>
+              <text x="340" y="72" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="12" font-weight="700">RT-AX52 (HFO)</text>
+              <text x="340" y="95" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="10">Hardware PPE Active</text>
+              <text x="340" y="116" text-anchor="middle" fill="#38bdf8" font-family="JetBrains Mono" font-size="9">940 Mbps • 6% CPU</text>
+              <path d="M430 95 L500 95" class="sim-flow-line" stroke="#34d399" stroke-width="2.5"/>
+              <rect x="500" y="45" width="164" height="100" rx="12" fill="#081226" stroke="#34d399" stroke-width="1.6"/>
+              <text x="582" y="78" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="11" font-weight="600">LAN / Wi-Fi 6</text>
+              <text x="582" y="98" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="9">Full Wire Speed</text>
+              <text x="582" y="116" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="9">OOM-Safe 256MB</text>
+            </svg>`
+          },
+          {
+            label: "SQM CAKE (Zero Bufferbloat)",
+            valA: "SQM piece_of_cake.qos Active",
+            valB: "Bufferbloat Grade: A+ • Loaded Ping: +1.8 ms",
+            log: "sqm,info interface=wan qdisc=cake ingress=90000kbit egress=90000kbit grade=A+",
+            svg: `<svg viewBox="0 0 680 190" class="w-full h-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="16" y="45" width="165" height="100" rx="12" fill="#081226" stroke="#14b8a6" stroke-width="1.6"/>
+              <text x="98" y="78" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="11" font-weight="600">WAN Shaping</text>
+              <text x="98" y="98" text-anchor="middle" fill="#2dd4bf" font-family="JetBrains Mono" font-size="9">CAKE Overhead=44</text>
+              <text x="98" y="116" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="9">DiffServ4 Priority</text>
+              <path d="M181 95 L250 95" class="sim-flow-line" stroke="#2dd4bf" stroke-width="2.5"/>
+              <rect x="250" y="38" width="180" height="114" rx="14" fill="#0c1b38" stroke="#2dd4bf" stroke-width="2"/>
+              <text x="340" y="72" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="12" font-weight="700">RT-AX52 (SQM)</text>
+              <text x="340" y="95" text-anchor="middle" fill="#2dd4bf" font-family="JetBrains Mono" font-size="10">piece_of_cake.qos</text>
+              <text x="340" y="116" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="9">+1.8ms Loaded Ping</text>
+              <path d="M430 95 L500 95" class="sim-flow-line" stroke="#34d399" stroke-width="2.5"/>
+              <rect x="500" y="45" width="164" height="100" rx="12" fill="#081226" stroke="#34d399" stroke-width="1.6"/>
+              <text x="582" y="78" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="11" font-weight="600">Gaming &amp; VoIP</text>
+              <text x="582" y="98" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="9">Grade A+ Latency</text>
+              <text x="582" y="116" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="9">Zero Jitter Spikes</text>
+            </svg>`
+          },
+          {
+            label: "AdBlock-Fast 480K+ Sync",
+            valA: "StevenBlack + HaGeZi-Light Raw Feeds",
+            valB: "482,140 Domains • Free RAM: 118 MB",
+            log: "adblock-fast,info dnsmasq_nftset loaded 482140 domains (OOM-safe OK)",
+            svg: `<svg viewBox="0 0 680 190" class="w-full h-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="16" y="45" width="165" height="100" rx="12" fill="#081226" stroke="#818cf8" stroke-width="1.6"/>
+              <text x="98" y="78" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="11" font-weight="600">Raw Blocklists</text>
+              <text x="98" y="98" text-anchor="middle" fill="#a5b4fc" font-family="JetBrains Mono" font-size="9">HaGeZi + StevenBlack</text>
+              <text x="98" y="116" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="9">gawk + coreutils-sort</text>
+              <path d="M181 95 L250 95" class="sim-flow-line" stroke="#818cf8" stroke-width="2.5"/>
+              <rect x="250" y="38" width="180" height="114" rx="14" fill="#0c1b38" stroke="#818cf8" stroke-width="2"/>
+              <text x="340" y="72" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="12" font-weight="700">dnsmasq + nftset</text>
+              <text x="340" y="95" text-anchor="middle" fill="#a5b4fc" font-family="JetBrains Mono" font-size="10">482,140 Rules Active</text>
+              <text x="340" y="116" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="9">118 MB Free RAM</text>
+              <path d="M430 95 L500 95" class="sim-flow-line" stroke="#34d399" stroke-width="2.5"/>
+              <rect x="500" y="45" width="164" height="100" rx="12" fill="#081226" stroke="#34d399" stroke-width="1.6"/>
+              <text x="582" y="78" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="11" font-weight="600">Quad DoH Upstream</text>
+              <text x="582" y="98" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="9">Zero DNS Leaks</text>
+              <text x="582" y="116" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="9">12ms Avg Lookup</text>
+            </svg>`
+          }
+        ],
+        calcTitle: "OpenWrt SQM CAKE & Overhead Calculator",
+        calcScriptLabel: "Generated OpenWrt UCI Config",
+        sliders: [
+          { id: "downMbps", label: "ISP Download Speed", min: 20, max: 500, step: 10, val: 100, unit: " Mbps" },
+          { id: "upMbps", label: "ISP Upload Speed", min: 10, max: 500, step: 10, val: 100, unit: " Mbps" },
+          { id: "pct", label: "SQM Shaping Target", min: 80, max: 95, step: 1, val: 90, unit: "%" },
+          { id: "overhead", label: "Link Layer Overhead", min: 18, max: 44, step: 2, val: 44, unit: " B" }
+        ],
+        compute(st) {
+          const dlKbps = Math.round(st.downMbps * 1000 * (st.pct / 100));
+          const ulKbps = Math.round(st.upMbps * 1000 * (st.pct / 100));
+          return {
+            kpis: [
+              { label: "SQM Download", val: `${dlKbps} kbit/s` },
+              { label: "SQM Upload", val: `${ulKbps} kbit/s` },
+              { label: "Overhead", val: `${st.overhead} bytes` },
+              { label: "Target Ratio", val: `${st.pct}% Line` }
+            ],
+            code: `uci set sqm.eth1.enabled='1'
+uci set sqm.eth1.interface='wan'
+uci set sqm.eth1.download='${dlKbps}'
+uci set sqm.eth1.upload='${ulKbps}'
+uci set sqm.eth1.qdisc='cake'
+uci set sqm.eth1.script='piece_of_cake.qos'
+uci set sqm.eth1.overhead='${st.overhead}'
+uci commit sqm && /etc/init.d/sqm restart`
+          };
+        },
+        phases: [
+          {
+            tab: "01 • APK Base & Tools",
+            filename: "01-openwrt-apk-packages.sh",
+            code: `apk update
+apk add gawk grep sed coreutils-sort curl ca-bundle \
+  luci-app-sqm luci-app-https-dns-proxy luci-app-adblock-fast \
+  luci-app-ttyd luci-app-commands vnstat2 luci-app-vnstat2`
+          },
+          {
+            tab: "02 • AdBlock-Fast Raw",
+            filename: "02-adblock-fast-raw.sh",
+            code: `uci set adblock-fast.config.enabled='1'
+uci set adblock-fast.config.dns='dnsmasq.nftset'
+uci add_list adblock-fast.config.url='https://raw.githubusercontent.com/hagezi/dns-blocklists/main/domains/light.txt'
+uci add_list adblock-fast.config.url='https://cdn.jsdelivr.net/gh/StevenBlack/hosts/hosts'
+uci commit adblock-fast && /etc/init.d/adblock-fast restart`
+          },
+          {
+            tab: "03 • TFTP Rescue Mode",
+            filename: "03-asus-tftp-rescue.sh",
+            code: `# Set PC static IP: 192.168.1.10 /24 | Hold Reset + Power On -> Solid Power LED
+tftp -i 192.168.1.1 PUT openwrt-25.12.6-mediatek-filogic-asus_rt-ax52-squashfs-sysupgrade.bin`
+          }
+        ],
+        runbookSteps: [
+          "Update apk index and install GNU text utilities (gawk, grep, sed, coreutils-sort).",
+          "Configure 4 https-dns-proxy instances and force LAN DNS interception.",
+          "Load HaGeZi-Light & StevenBlack raw blocklists into adblock-fast.",
+          "Toggle between HFO (gigabit) and SQM CAKE (zero bufferbloat) via luci-app-commands."
+        ],
+        benchmarks: [
+          { label: "Filtered Domains", val: "480K+ Rules", note: "OOM-safe dnsmasq.nftset profile running cleanly inside 256MB RAM." },
+          { label: "Loaded Latency", val: "Grade A+", note: "Under +2ms ping variance during saturated downloads with SQM CAKE." },
+          { label: "Recovery Window", val: "< 90 sec", note: "Deterministic ASUS RT-AX52 TFTP rescue image flash workflow." }
+        ]
+      },
+      {
+        id: "openwrt-mobile",
+        num: "03",
+        shortTab: "03 • Mobile LuCI & Telemetry",
+        category: "Mobile Admin & Telemetry",
+        statusBadge: "LAN-Only :7681 & :9100",
+        envBadge: "Yet Another LuCI App",
+        hwTag: "Argon v2.4.3 Dark • Collectd",
+        title: "Mobile LuCI & Telemetry",
+        summary: "Smartphone-first router administration, Argon v2.4.3 Dark UI & LAN-locked telemetry.",
+        details: "Designed a mobile-first router administration workflow using Yet Another LuCI App, Argon Dark UI, collectd RRD graphing, and vnstat2 monthly bandwidth tracking strictly isolated to the local LAN subnet.",
+        metrics: ["Yet Another LuCI App", "Argon v2.4.3 Dark UI", "Collectd & vnstat2", "Zero WAN Exposure"],
+        archPoints: [
+          "Bound ttyd (:7681) and uhttpd LuCI RPC strictly to br-lan (192.168.1.1) with zero WAN firewall ingress.",
+          "Configured collectd modules (cpu, memory, interface, wireless, ping) and vnstat2 for instant smartphone diagnostics.",
+          "Applied Jerrykuku Argon v2.4.3 Dark theme with one-tap custom command buttons for WAN/SQM/AdBlock health checks."
+        ],
+        simModes: [
+          {
+            label: "LAN-Only RPC Polling",
+            valA: "br-lan 192.168.1.1 • ubus/rpcd TLS",
+            valB: "Polling: 110 ms • WAN Ports: 0 Open",
+            log: "uhttpd,info rpcd json-rpc ok src=192.168.1.42 latency=110ms wan_drop=all",
+            svg: `<svg viewBox="0 0 680 190" class="w-full h-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="16" y="45" width="165" height="100" rx="12" fill="#081226" stroke="#38bdf8" stroke-width="1.6"/>
+              <text x="98" y="78" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="11" font-weight="600">Smartphone</text>
+              <text x="98" y="98" text-anchor="middle" fill="#38bdf8" font-family="JetBrains Mono" font-size="9">Yet Another LuCI</text>
+              <text x="98" y="116" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="9">Wi-Fi 6 LAN Client</text>
+              <path d="M181 95 L250 95" class="sim-flow-line" stroke="#38bdf8" stroke-width="2.5"/>
+              <rect x="250" y="38" width="180" height="114" rx="14" fill="#0c1b38" stroke="#38bdf8" stroke-width="2"/>
+              <text x="340" y="72" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="12" font-weight="700">uhttpd + rpcd</text>
+              <text x="340" y="95" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="10">Bound: 192.168.1.1</text>
+              <text x="340" y="116" text-anchor="middle" fill="#38bdf8" font-family="JetBrains Mono" font-size="9">Argon v2.4.3 Dark</text>
+              <path d="M430 95 L500 95" class="sim-flow-line" stroke="#34d399" stroke-width="2.5"/>
+              <rect x="500" y="45" width="164" height="100" rx="12" fill="#081226" stroke="#34d399" stroke-width="1.6"/>
+              <text x="582" y="78" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="11" font-weight="600">Telemetry Store</text>
+              <text x="582" y="98" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="9">collectd + vnstat2</text>
+              <text x="582" y="116" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="9">50°C SoC • 110ms</text>
+            </svg>`
+          },
+          {
+            label: "WAN Port Probe Test",
+            valA: "External WAN Ingress Blocked (DROP)",
+            valB: ":80, :443, :7681, :9100 Stealth Closed",
+            log: "firewall,warn wan_drop proto=TCP dport=7681 action=REJECT_STEALTH",
+            svg: `<svg viewBox="0 0 680 190" class="w-full h-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="16" y="45" width="165" height="100" rx="12" fill="#1e0b14" stroke="#f43f5e" stroke-width="1.6"/>
+              <text x="98" y="78" text-anchor="middle" fill="#fda4af" font-family="JetBrains Mono" font-size="11" font-weight="600">External Probe</text>
+              <text x="98" y="98" text-anchor="middle" fill="#f43f5e" font-family="JetBrains Mono" font-size="9">Scan :7681 / :9100</text>
+              <text x="98" y="116" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="9">Untrusted WAN</text>
+              <path d="M181 95 L250 95" stroke="#f43f5e" stroke-width="2" stroke-dasharray="4 4"/>
+              <rect x="250" y="38" width="180" height="114" rx="14" fill="#0c1b38" stroke="#f43f5e" stroke-width="2"/>
+              <text x="340" y="72" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="12" font-weight="700">nftables WAN</text>
+              <text x="340" y="95" text-anchor="middle" fill="#f43f5e" font-family="JetBrains Mono" font-size="10">0 Ports Exposed</text>
+              <text x="340" y="116" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="9">LAN-Only Socket Bind</text>
+              <path d="M430 95 L500 95" stroke="#34d399" stroke-width="2"/>
+              <rect x="500" y="45" width="164" height="100" rx="12" fill="#081226" stroke="#34d399" stroke-width="1.6"/>
+              <text x="582" y="78" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="11" font-weight="600">Protected LAN</text>
+              <text x="582" y="98" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="9">192.168.1.0/24 Safe</text>
+              <text x="582" y="116" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="9">Admin Isolated</text>
+            </svg>`
+          },
+          {
+            label: "One-Tap Health Check",
+            valA: "luci-app-commands Diagnostic Trigger",
+            valB: "DoH: 4/4 Up • DNSSEC: Valid • Mem: 46%",
+            log: "commands,info health_check: doh=4/4 adblock=482k temp=51C mem_free=118MB",
+            svg: `<svg viewBox="0 0 680 190" class="w-full h-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="16" y="45" width="165" height="100" rx="12" fill="#081226" stroke="#34d399" stroke-width="1.6"/>
+              <text x="98" y="78" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="11" font-weight="600">Mobile Tap</text>
+              <text x="98" y="98" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="9">Run Health Check</text>
+              <text x="98" y="116" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="9">Zero SSH Typing</text>
+              <path d="M181 95 L250 95" class="sim-flow-line" stroke="#34d399" stroke-width="2.5"/>
+              <rect x="250" y="38" width="180" height="114" rx="14" fill="#0c1b38" stroke="#34d399" stroke-width="2"/>
+              <text x="340" y="72" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="12" font-weight="700">Diagnostic Suite</text>
+              <text x="340" y="95" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="10">DoH + AdBlock + RAM</text>
+              <text x="340" y="116" text-anchor="middle" fill="#38bdf8" font-family="JetBrains Mono" font-size="9">All Checks Green</text>
+              <path d="M430 95 L500 95" class="sim-flow-line" stroke="#38bdf8" stroke-width="2.5"/>
+              <rect x="500" y="45" width="164" height="100" rx="12" fill="#081226" stroke="#38bdf8" stroke-width="1.6"/>
+              <text x="582" y="78" text-anchor="middle" fill="#fff" font-family="JetBrains Mono" font-size="11" font-weight="600">JSON Status</text>
+              <text x="582" y="98" text-anchor="middle" fill="#38bdf8" font-family="JetBrains Mono" font-size="9">SoC 51°C • 118MB Free</text>
+              <text x="582" y="116" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="9">Rendered on Phone</text>
+            </svg>`
+          }
+        ],
+        calcTitle: "Mobile Telemetry & Socket Hardening Calculator",
+        calcScriptLabel: "Generated LAN-Lock UCI Config",
+        sliders: [
+          { id: "pollSec", label: "Collectd Poll Interval", min: 5, max: 60, step: 5, val: 15, unit: " s" },
+          { id: "ttydPort", label: "LAN ttyd Terminal Port", min: 7680, max: 7690, step: 1, val: 7681, unit: "" },
+          { id: "rrdDays", label: "RRD History Retention", min: 7, max: 90, step: 7, val: 30, unit: " d" }
+        ],
+        compute(st) {
+          const ramKb = Math.round(420 + (st.rrdDays * 12) + (60 / st.pollSec) * 40);
+          return {
+            kpis: [
+              { label: "Socket Bind", val: `192.168.1.1:${st.ttydPort}` },
+              { label: "Poll Interval", val: `${st.pollSec} sec` },
+              { label: "RRD Footprint", val: `~${ramKb} KB` },
+              { label: "WAN Exposure", val: "0 Open Ports" }
+            ],
+            code: `uci set ttyd.@ttyd[0].interface='br-lan'
+uci set ttyd.@ttyd[0].port='${st.ttydPort}'
+uci set luci_statistics.collectd.Interval='${st.pollSec}'
+uci set luci_statistics.collectd_rrdtool.RRATimespans='1hour 1day ${st.rrdDays}days'
+uci commit ttyd && uci commit luci_statistics
+/etc/init.d/ttyd restart && /etc/init.d/luci_statistics restart`
+          };
+        },
+        phases: [
+          {
+            tab: "01 • LAN Socket Lock",
+            filename: "01-lan-socket-lock.sh",
+            code: `uci set uhttpd.main.listen_http='192.168.1.1:80'
+uci set uhttpd.main.listen_https='192.168.1.1:443'
+uci set ttyd.@ttyd[0].interface='br-lan'
+uci set ttyd.@ttyd[0].port='7681'
+uci commit && /etc/init.d/uhttpd restart && /etc/init.d/ttyd restart`
+          },
+          {
+            tab: "02 • Argon v2.4.3 Dark",
+            filename: "02-argon-dark-install.sh",
+            code: `wget -O /tmp/luci-theme-argon.apk "https://github.com/jerrykuku/luci-theme-argon/releases/download/v2.4.3/luci-theme-argon-2.4.3-r20250722.apk"
+apk add --allow-untrusted /tmp/luci-theme-argon.apk
+uci set luci.main.mediaurlbase='/luci-static/argon'
+uci commit luci && /etc/init.d/uhttpd restart`
+          },
+          {
+            tab: "03 • Collectd & vnStat2",
+            filename: "03-collectd-vnstat2.sh",
+            code: `apk add luci-app-statistics collectd-mod-cpu collectd-mod-memory \
+  collectd-mod-interface collectd-mod-wireless collectd-mod-ping vnstat2 luci-app-vnstat2
+/etc/init.d/vnstat enable && /etc/init.d/vnstat start`
+          }
+        ],
+        runbookSteps: [
+          "Bind uhttpd and ttyd strictly to br-lan so zero admin ports listen on WAN.",
+          "Install Jerrykuku Argon v2.4.3 Dark theme for mobile-friendly contrast.",
+          "Enable collectd modules and vnstat2 monthly traffic persistence.",
+          "Connect Yet Another LuCI App on smartphone over LAN for one-tap telemetry."
+        ],
+        benchmarks: [
+          { label: "WAN Attack Surface", val: "0 Open Ports", note: "All management & telemetry sockets strictly bound to br-lan." },
+          { label: "Mobile RPC Polling", val: "< 120 ms", note: "Lightweight JSON-RPC ubus/rpcd status updates over LAN Wi-Fi." },
+          { label: "SoC Thermal Envelope", val: "< 54 °C", note: "Continuous collectd thermal tracking on MT7981B under load." }
+        ]
+      }
+    ];
+
+    let activeStudyIdx = 0;
+    let activeSubtab = "simulator";
+    let activePhaseIdx = 0;
+    let activeMainCliCode = "";
+    let toastTimer = null;
+
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      document.getElementById("toast-msg").textContent = msg;
+      toast.classList.remove("opacity-0");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.add("opacity-0"), 2500);
+    }
+
+    function copyTextToClipboard(text, msg) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => showToast(msg)).catch(() => fallbackCopy(text, msg));
+      } else {
+        fallbackCopy(text, msg);
+      }
+    }
+
+    function fallbackCopy(text, msg) {
+      const tmp = document.createElement("textarea");
+      tmp.value = text;
+      document.body.appendChild(tmp);
+      tmp.select();
+      document.execCommand("copy");
+      document.body.removeChild(tmp);
+      showToast(msg);
+    }
+
+    function switchSubtab(id) {
+      activeSubtab = id;
+      document.querySelectorAll("#subtab-bar .subtab-btn").forEach((b) => {
+        b.classList.toggle("is-active", b.dataset.subtab === id);
+      });
+      ["simulator", "cli", "telemetry"].forEach((pid) => {
+        const panel = document.getElementById(`panel-${pid}`);
+        if (panel) panel.classList.toggle("hidden", pid !== id);
+      });
+    }
+
+    function renderStudy(idx) {
+      activeStudyIdx = idx;
+      const st = STUDIES[idx];
+      if (STUDY_3D_PRESETS[idx]) sectionCameraState = STUDY_3D_PRESETS[idx];
+
+      // Top pills
+      const switcher = document.getElementById("study-switcher");
+      switcher.innerHTML = STUDIES.map((item, i) => `
+        <button type="button" data-study-idx="${i}" class="study-pill rounded-full border border-slate-700/80 bg-slate-900/70 px-3.5 py-1.5 font-mono-tech text-xs whitespace-nowrap ${i === idx ? "is-active" : "text-slate-300"}">
+          ${item.shortTab}
+        </button>
+      `).join("");
+      switcher.querySelectorAll(".study-pill").forEach((btn) => {
+        btn.addEventListener("click", () => renderStudy(Number(btn.dataset.studyIdx)));
+      });
+
+      // Header metadata
+      document.getElementById("cs-index").textContent = `CASE STUDY ${st.num} // ${st.category.toUpperCase()}`;
+      document.getElementById("cs-status").textContent = st.statusBadge;
+      document.getElementById("cs-env").textContent = st.envBadge;
+      document.getElementById("cs-title").textContent = st.title;
+      document.getElementById("cs-summary").textContent = st.summary;
+      document.getElementById("cs-details").textContent = st.details;
+      document.getElementById("cs-hw-tag").textContent = st.hwTag;
+      document.getElementById("footer-status").textContent = `Case Study ${st.num} of 0${STUDIES.length} • ${st.title}`;
+
+      document.getElementById("cs-metrics").innerHTML = st.metrics
+        .map((m) => `<span class="rounded-full border border-slate-700/80 bg-slate-900/75 px-3 py-1 font-mono-tech text-[11px] text-slate-200">${m}</span>`)
+        .join("");
+
+      document.getElementById("cs-arch-points").innerHTML = st.archPoints
+        .map((pt) => `<li class="flex items-start gap-2.5"><span class="mt-1.5 h-1.5 w-1.5 rounded-full bg-sky-400 shrink-0"></span><span>${pt}</span></li>`)
+        .join("");
+
+      // 1. Simulator
+      const simBtns = document.getElementById("sim-buttons");
+      let activeSimIdx = 0;
+      function selectSim(mIdx) {
+        activeSimIdx = mIdx % st.simModes.length;
+        const m = st.simModes[activeSimIdx];
+        const svgWrap = document.getElementById("sim-svg");
+        svgWrap.innerHTML = m.svg;
+        // Make every node box in the SVG diagram clickable to step through live states
+        svgWrap.querySelectorAll("rect").forEach((rect, rIdx) => {
+          rect.classList.add("sim-node");
+          rect.setAttribute("title", "Click node to simulate next live state");
+          rect.addEventListener("click", () => {
+            const targetIdx = rIdx < st.simModes.length ? rIdx : (activeSimIdx + 1) % st.simModes.length;
+            selectSim(targetIdx === activeSimIdx ? (activeSimIdx + 1) % st.simModes.length : targetIdx);
+          });
+        });
+        document.getElementById("sim-val-a").textContent = m.valA;
+        document.getElementById("sim-val-b").textContent = m.valB;
+        const nowTime = new Date().toTimeString().slice(0, 8);
+        document.getElementById("sim-log").textContent = `[${nowTime}] ${m.log}`;
+        simBtns.querySelectorAll("button").forEach((b, bi) => {
+          b.className = bi === activeSimIdx
+            ? "rounded-xl border border-sky-400/60 bg-sky-500/20 px-3 py-1.5 font-mono-tech text-[11px] font-medium text-sky-200 transition shadow-[0_0_16px_rgba(56,189,248,0.2)]"
+            : "rounded-xl border border-slate-700/80 bg-slate-900/70 px-3 py-1.5 font-mono-tech text-[11px] text-slate-300 hover:border-sky-400/40 hover:text-white transition";
+        });
+      }
+      window.__cycleCurrentSim = () => selectSim((activeSimIdx + 1) % st.simModes.length);
+      simBtns.innerHTML = st.simModes.map((m, mi) => `<button type="button" data-sim-idx="${mi}">${m.label}</button>`).join("");
+      simBtns.querySelectorAll("button").forEach((b) => {
+        b.addEventListener("click", () => selectSim(Number(b.dataset.simIdx)));
+      });
+      selectSim(0);
+
+      // 2. Calculator
+      document.getElementById("calc-title").textContent = st.calcTitle;
+      document.getElementById("calc-script-label").textContent = st.calcScriptLabel;
+      const calcControls = document.getElementById("calc-controls");
+      const calcKpis = document.getElementById("calc-kpis");
+      const calcOutput = document.getElementById("calc-output");
+      const calcState = {};
+      st.sliders.forEach((sl) => { calcState[sl.id] = sl.val; });
+
+      calcControls.innerHTML = st.sliders.map((sl) => `
+        <div>
+          <div class="flex items-center justify-between text-xs mb-1">
+            <span class="text-slate-300 font-medium">${sl.label}</span>
+            <span id="calc-val-${sl.id}" class="font-mono-tech text-sky-300 font-semibold">${sl.val}${sl.unit}</span>
+          </div>
+          <input type="range" data-slider-id="${sl.id}" data-slider-unit="${sl.unit}" min="${sl.min}" max="${sl.max}" step="${sl.step}" value="${sl.val}" class="w-full accent-sky-400 cursor-pointer h-1.5 bg-slate-800 rounded-lg" />
+        </div>
+      `).join("");
+
+      function refreshCalc() {
+        const res = st.compute(calcState);
+        calcKpis.innerHTML = res.kpis.map((k) => `
+          <div class="rounded-xl border border-slate-800/90 bg-slate-900/70 p-3">
+            <p class="font-mono-tech text-[10px] uppercase tracking-wider text-slate-400">${k.label}</p>
+            <p class="mt-1 font-mono-tech text-sm sm:text-base font-bold text-emerald-300">${k.val}</p>
+          </div>
+        `).join("");
+        calcOutput.textContent = res.code;
+      }
+
+      calcControls.querySelectorAll("input[type='range']").forEach((inp) => {
+        inp.addEventListener("input", () => {
+          const id = inp.dataset.sliderId;
+          const unit = inp.dataset.sliderUnit;
+          calcState[id] = Number(inp.value);
+          const lbl = document.getElementById(`calc-val-${id}`);
+          if (lbl) lbl.textContent = `${inp.value}${unit}`;
+          refreshCalc();
+        });
+      });
+      refreshCalc();
+
+      // 3. Multi-Phase CLI & Runbook
+      const phaseTabs = document.getElementById("phase-tabs");
+      function selectPhase(pIdx) {
+        activePhaseIdx = pIdx;
+        const ph = st.phases[pIdx];
+        activeMainCliCode = ph.code;
+        document.getElementById("cli-filename").textContent = ph.filename;
+        document.getElementById("cli-code").textContent = ph.code;
+        phaseTabs.querySelectorAll("button").forEach((b, bi) => {
+          b.className = bi === pIdx
+            ? "rounded-xl border border-emerald-400/60 bg-emerald-500/20 px-3 py-1.5 font-mono-tech text-xs font-medium text-emerald-200 transition"
+            : "rounded-xl border border-slate-700/80 bg-slate-900/70 px-3 py-1.5 font-mono-tech text-xs text-slate-300 hover:border-sky-400/40 hover:text-white transition";
+        });
+      }
+      phaseTabs.innerHTML = st.phases.map((ph, pi) => `<button type="button" data-phase-idx="${pi}">${ph.tab}</button>`).join("");
+      phaseTabs.querySelectorAll("button").forEach((b) => {
+        b.addEventListener("click", () => selectPhase(Number(b.dataset.phaseIdx)));
+      });
+      selectPhase(0);
+
+      document.getElementById("runbook-steps").innerHTML = st.runbookSteps
+        .map((step) => `<li class="leading-relaxed text-slate-200">${step}</li>`)
+        .join("");
+
+      // 4. Telemetry Cards
+      document.getElementById("panel-telemetry").innerHTML = st.benchmarks.map((b) => `
+        <div class="rounded-2xl border border-slate-800/90 bg-slate-950/65 p-5 flex flex-col justify-between">
+          <p class="font-mono-tech text-[11px] uppercase tracking-wider text-sky-400">${b.label}</p>
+          <p class="mt-2 font-serif-display text-4xl text-white">${b.val}</p>
+          <p class="mt-2 text-xs text-slate-300 leading-relaxed">${b.note}</p>
+        </div>
+      `).join("");
+    }
+
+    let sectionCameraState = {
+      camZ: 6.3,
+      offsetX: 0.0,
+      offsetY: 0.05,
+      tiltZ: 0.08,
+      lightHex: 0x38bdf8
+    };
+    const STUDY_3D_PRESETS = [
+      { camZ: 6.2, offsetX: 0.0,   offsetY: 0.05, tiltZ: 0.10,  lightHex: 0x38bdf8 },
+      { camZ: 6.4, offsetX: 0.25,  offsetY: 0.04, tiltZ: -0.10, lightHex: 0x2dd4bf },
+      { camZ: 6.1, offsetX: -0.25, offsetY: 0.06, tiltZ: 0.08,  lightHex: 0x818cf8 }
+    ];
+
+    function initWebGL() {
+      const canvas = document.getElementById("webgl-canvas");
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: "high-performance" });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+      camera.position.z = 5.8;
+
+      const ambient = new THREE.AmbientLight(0x94a3b8, 0.65);
+      scene.add(ambient);
+
+      const cyanLight = new THREE.PointLight(0x38bdf8, 2.5, 20);
+      cyanLight.position.set(4, 3, 4);
+      scene.add(cyanLight);
+
+      const magentaLight = new THREE.PointLight(0xec4899, 1.9, 20);
+      magentaLight.position.set(-4, -3, 3);
+      scene.add(magentaLight);
+
+      // Group 1: Persistent 6,409-Particle 3D Infinity Sign <-> 3D Mobius Strip + Internal Core Energy Beam
+      const U_SEGS = 220;
+      const V_SEGS = 28;
+      const VERT_COUNT = (U_SEGS + 1) * (V_SEGS + 1);
+
+      const infPositions = new Float32Array(VERT_COUNT * 3);
+      const mobPositions = new Float32Array(VERT_COUNT * 3);
+      const bangOffsets = new Float32Array(VERT_COUNT * 3);
+      const bangSwirls = new Float32Array(VERT_COUNT * 3);
+      const vertU = new Float32Array(VERT_COUNT);
+      const infCenterline = [];
+      const mobCenterline = [];
+
+      const P = new THREE.Vector3();
+      const T = new THREE.Vector3();
+      const N = new THREE.Vector3();
+      const B = new THREE.Vector3();
+      const fixedZ = new THREE.Vector3(0, 0, 1);
+
+      function getInfinityCenter(u, out) {
+        const a = u * Math.PI * 2;
+        const denom = 1 + Math.sin(a) * Math.sin(a);
+        const x = (2.15 * Math.cos(a)) / denom;
+        const y = (2.15 * Math.sin(a) * Math.cos(a)) / denom;
+        const z = Math.sin(a) * 0.36;
+        return out.set(x, y, z);
+      }
+
+      function getMobiusCenter(u, out) {
+        const a = u * Math.PI * 2;
+        const R = 1.62;
+        return out.set(R * Math.cos(a), R * Math.sin(a), Math.sin(a * 2) * 0.18);
+      }
+
+      const tmpNext = new THREE.Vector3();
+      for (let i = 0; i <= U_SEGS; i++) {
+        const u = i / U_SEGS;
+        const a = u * Math.PI * 2;
+
+        getInfinityCenter(u, P);
+        getInfinityCenter((u + 0.0005) % 1, tmpNext);
+        T.copy(tmpNext).sub(P).normalize();
+        N.crossVectors(T, fixedZ).normalize();
+        B.crossVectors(T, N).normalize();
+        infCenterline.push(P.clone());
+
+        const mCenter = getMobiusCenter(u, new THREE.Vector3());
+        mobCenterline.push(mCenter.clone());
+        const radDir = new THREE.Vector3(Math.cos(a), Math.sin(a), 0);
+        const zDir = new THREE.Vector3(0, 0, 1);
+        const twist = a * 0.5;
+        const cosT = Math.cos(twist);
+        const sinT = Math.sin(twist);
+
+        for (let j = 0; j <= V_SEGS; j++) {
+          const v = (j / V_SEGS) * Math.PI * 2;
+          const vIdx = i * (V_SEGS + 1) + j;
+          const idx = vIdx * 3;
+          vertU[vIdx] = u;
+
+          const rInf = 0.22;
+          const cx = -rInf * Math.cos(v);
+          const cy = rInf * Math.sin(v);
+          infPositions[idx] = P.x + cx * N.x + cy * B.x;
+          infPositions[idx + 1] = P.y + cx * N.y + cy * B.y;
+          infPositions[idx + 2] = P.z + cx * N.z + cy * B.z;
+
+          const halfW = 0.42;
+          const halfH = 0.095;
+          const localU = Math.cos(v) * halfW;
+          const localV = Math.sin(v) * halfH;
+
+          const rx = localU * cosT - localV * sinT;
+          const rz = localU * sinT + localV * cosT;
+
+          mobPositions[idx] = mCenter.x + rx * radDir.x + rz * zDir.x;
+          mobPositions[idx + 1] = mCenter.y + rx * radDir.y + rz * zDir.y;
+          mobPositions[idx + 2] = mCenter.z + rx * radDir.z + rz * zDir.z;
+
+          const seed1 = Math.sin(i * 12.9898 + j * 78.233) * 43758.5453;
+          const seed2 = Math.sin(i * 93.9898 + j * 47.233) * 24634.6345;
+          const seed3 = Math.sin(i * 45.164 + j * 19.873) * 19384.2834;
+          const r1 = seed1 - Math.floor(seed1);
+          const r2 = seed2 - Math.floor(seed2);
+          const r3 = seed3 - Math.floor(seed3);
+
+          const theta = r1 * Math.PI * 2;
+          const radialDist = 0.55 + r3 * 1.15;
+
+          const bx = Math.cos(theta) * radialDist;
+          const by = Math.sin(theta) * radialDist * 0.78;
+          const bz = (r2 - 0.62) * 0.85;
+
+          bangOffsets[idx] = bx;
+          bangOffsets[idx + 1] = by;
+          bangOffsets[idx + 2] = bz;
+
+          bangSwirls[idx] = -by * 0.45;
+          bangSwirls[idx + 1] = bx * 0.45;
+          bangSwirls[idx + 2] = (r1 - 0.5) * 0.25;
+        }
+      }
+
+      const morphIndices = [];
+      for (let i = 0; i < U_SEGS; i++) {
+        for (let j = 0; j < V_SEGS; j++) {
+          const a = i * (V_SEGS + 1) + j;
+          const b = (i + 1) * (V_SEGS + 1) + j;
+          const c = (i + 1) * (V_SEGS + 1) + (j + 1);
+          const d = i * (V_SEGS + 1) + (j + 1);
+          morphIndices.push(a, b, d, b, c, d);
+        }
+      }
+
+      function buildStaticShapeGeo(posArray) {
+        const g = new THREE.BufferGeometry();
+        g.setIndex(morphIndices);
+        g.setAttribute("position", new THREE.BufferAttribute(new Float32Array(posArray), 3));
+        g.computeVertexNormals();
+        return g;
+      }
+
+      const infinityMesh = new THREE.Group();
+      infinityMesh.position.set(0, 0.05, 0);
+      scene.add(infinityMesh);
+
+      const infGeo = buildStaticShapeGeo(infPositions);
+      const infSolidMat = new THREE.MeshStandardMaterial({
+        color: 0x071020,
+        metalness: 0.75,
+        roughness: 0.22,
+        transparent: true,
+        opacity: 0.42,
+        depthWrite: false,
+        side: THREE.DoubleSide
+      });
+      const infWireMat = new THREE.MeshBasicMaterial({
+        color: 0x38bdf8,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.09,
+        depthWrite: false
+      });
+      const infSolidMesh = new THREE.Mesh(infGeo, infSolidMat);
+      infSolidMesh.add(new THREE.Mesh(infGeo, infWireMat));
+      infinityMesh.add(infSolidMesh);
+
+      const mobGeo = buildStaticShapeGeo(mobPositions);
+      const mobSolidMat = new THREE.MeshStandardMaterial({
+        color: 0x071020,
+        metalness: 0.75,
+        roughness: 0.22,
+        transparent: true,
+        opacity: 0.0,
+        depthWrite: false,
+        side: THREE.DoubleSide
+      });
+      const mobWireMat = new THREE.MeshBasicMaterial({
+        color: 0x38bdf8,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.0,
+        depthWrite: false
+      });
+      const mobSolidMesh = new THREE.Mesh(mobGeo, mobSolidMat);
+      mobSolidMesh.add(new THREE.Mesh(mobGeo, mobWireMat));
+      mobSolidMesh.visible = false;
+      infinityMesh.add(mobSolidMesh);
+
+      const bangGeo = new THREE.BufferGeometry();
+      const bangLivePos = new Float32Array(infPositions);
+      const bangColors = new Float32Array(VERT_COUNT * 3);
+      const cBangCyan = new THREE.Color(0x38bdf8);
+      const cBangIndigo = new THREE.Color(0x818cf8);
+      const cBangPink = new THREE.Color(0xe879f9);
+
+      for (let i = 0; i < VERT_COUNT; i++) {
+        const mixRatio = (i % (V_SEGS + 1)) / V_SEGS;
+        const c = mixRatio < 0.5
+          ? cBangCyan.clone().lerp(cBangIndigo, mixRatio * 2)
+          : cBangIndigo.clone().lerp(cBangPink, (mixRatio - 0.5) * 2);
+        bangColors[i * 3] = c.r;
+        bangColors[i * 3 + 1] = c.g;
+        bangColors[i * 3 + 2] = c.b;
+      }
+      bangGeo.setAttribute("position", new THREE.BufferAttribute(bangLivePos, 3));
+      bangGeo.setAttribute("color", new THREE.BufferAttribute(bangColors, 3));
+
+      const bangMat = new THREE.PointsMaterial({
+        size: 0.022,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.52,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+      const bangCloud = new THREE.Points(bangGeo, bangMat);
+      bangCloud.visible = true;
+      infinityMesh.add(bangCloud);
+
+      // Internal Core Energy Beam
+      const BEAM_SEGS = 110;
+      const BEAM_RAD_SEGS = 12;
+      const BEAM_VERTS = (BEAM_SEGS + 1) * (BEAM_RAD_SEGS + 1);
+      const BEAM_LENGTH = 0.34;
+
+      const beamGeo = new THREE.BufferGeometry();
+      const beamPos = new Float32Array(BEAM_VERTS * 3);
+      const beamCol = new Float32Array(BEAM_VERTS * 3);
+      const beamIndices = [];
+
+      for (let i = 0; i < BEAM_SEGS; i++) {
+        for (let j = 0; j < BEAM_RAD_SEGS; j++) {
+          const a = i * (BEAM_RAD_SEGS + 1) + j;
+          const b = (i + 1) * (BEAM_RAD_SEGS + 1) + j;
+          const c = (i + 1) * (BEAM_RAD_SEGS + 1) + (j + 1);
+          const d = i * (BEAM_RAD_SEGS + 1) + (j + 1);
+          beamIndices.push(a, b, d, b, c, d);
+        }
+      }
+
+      const cBeamHead = new THREE.Color(0xe0f2fe);
+      const cBeamCore = new THREE.Color(0x38bdf8);
+      const cBeamTail = new THREE.Color(0x6366f1);
+
+      for (let i = 0; i <= BEAM_SEGS; i++) {
+        const sFrac = i / BEAM_SEGS;
+        const env = Math.sin((1 - sFrac) * Math.PI * 0.5) * Math.min(1, sFrac * 8.0 + 0.15);
+        const col = sFrac < 0.25
+          ? cBeamHead.clone().lerp(cBeamCore, sFrac / 0.25)
+          : cBeamCore.clone().lerp(cBeamTail, (sFrac - 0.25) / 0.75);
+        for (let j = 0; j <= BEAM_RAD_SEGS; j++) {
+          const vIdx = (i * (BEAM_RAD_SEGS + 1) + j) * 3;
+          beamCol[vIdx] = col.r * env;
+          beamCol[vIdx + 1] = col.g * env;
+          beamCol[vIdx + 2] = col.b * env;
+        }
+      }
+
+      beamGeo.setIndex(beamIndices);
+      beamGeo.setAttribute("position", new THREE.BufferAttribute(beamPos, 3));
+      beamGeo.setAttribute("color", new THREE.BufferAttribute(beamCol, 3));
+
+      const beamMat = new THREE.MeshBasicMaterial({
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.92,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        side: THREE.DoubleSide
+      });
+      const energyBeamMesh = new THREE.Mesh(beamGeo, beamMat);
+      infinityMesh.add(energyBeamMesh);
+
+      const beamLight = new THREE.PointLight(0x38bdf8, 1.8, 3.8);
+      infinityMesh.add(beamLight);
+
+      function sampleShapeCenter(u, isMobius, out) {
+        const wrapped = ((u % 1) + 1) % 1;
+        const fIdx = wrapped * U_SEGS;
+        const i0 = Math.floor(fIdx);
+        const i1 = Math.min(U_SEGS, i0 + 1);
+        const alpha = fIdx - i0;
+        const list = isMobius ? mobCenterline : infCenterline;
+        return out.set(
+          list[i0].x + (list[i1].x - list[i0].x) * alpha,
+          list[i0].y + (list[i1].y - list[i0].y) * alpha,
+          list[i0].z + (list[i1].z - list[i0].z) * alpha
+        );
+      }
+
+      const bP = new THREE.Vector3();
+      const bNext = new THREE.Vector3();
+      const bT = new THREE.Vector3();
+      const bN = new THREE.Vector3();
+      const bB = new THREE.Vector3();
+
+      function updateInternalEnergyBeam(headU, isMobius) {
+        const posAttr = beamGeo.attributes.position;
+        const arr = posAttr.array;
+
+        for (let i = 0; i <= BEAM_SEGS; i++) {
+          const sFrac = i / BEAM_SEGS;
+          const u = headU - sFrac * BEAM_LENGTH;
+          sampleShapeCenter(u, isMobius, bP);
+          sampleShapeCenter(u + 0.001, isMobius, bNext);
+          bT.copy(bNext).sub(bP).normalize();
+          bN.crossVectors(bT, fixedZ).normalize();
+          bB.crossVectors(bT, bN).normalize();
+
+          const rBeam = 0.046 * Math.sin((1 - sFrac * 0.85) * Math.PI);
+
+          for (let j = 0; j <= BEAM_RAD_SEGS; j++) {
+            const v = (j / BEAM_RAD_SEGS) * Math.PI * 2;
+            const cx = -rBeam * Math.cos(v);
+            const cy = rBeam * Math.sin(v);
+            const idx = (i * (BEAM_RAD_SEGS + 1) + j) * 3;
+
+            arr[idx] = bP.x + cx * bN.x + cy * bB.x;
+            arr[idx + 1] = bP.y + cx * bN.y + cy * bB.y;
+            arr[idx + 2] = bP.z + cx * bN.z + cy * bB.z;
+          }
+        }
+        posAttr.needsUpdate = true;
+        sampleShapeCenter(headU, isMobius, bP);
+        beamLight.position.copy(bP);
+      }
+
+      function smoothstep(edge0, edge1, x) {
+        const t = Math.max(0, Math.min(1, (x - edge0) / (edge1 - edge0)));
+        return t * t * (3 - 2 * t);
+      }
+
+      let cyclePhase = 0;
+      let accelDistance = 0;
+      let bangProgress = 0;
+
+      // Group 2: Particle Mesh (3D cloud)
+      const count = 900;
+      const positions = new Float32Array(count * 3);
+      for (let i = 0; i < count; i++) {
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+        const r = 1.8 + Math.random() * 1.4;
+        positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+        positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+        positions[i * 3 + 2] = r * Math.cos(phi);
+      }
+      const particleGeo = new THREE.BufferGeometry();
+      particleGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+      const particleMat = new THREE.PointsMaterial({
+        color: 0x7dd3fc,
+        size: 0.045,
+        transparent: true,
+        opacity: 0.85
+      });
+      const particles = new THREE.Points(particleGeo, particleMat);
+      particles.visible = false;
+      scene.add(particles);
+
+      let targetX = 0;
+      let targetY = 0;
+      window.addEventListener("pointermove", (e) => {
+        targetX = (e.clientX / window.innerWidth - 0.5) * 0.8;
+        targetY = (e.clientY / window.innerHeight - 0.5) * 0.8;
+      });
+
+      window.addEventListener("resize", () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+
+      const clock = new THREE.Clock();
+      const targetLightColor = new THREE.Color(0x38bdf8);
+
+      function animate() {
+        requestAnimationFrame(animate);
+        if (document.hidden) return;
+        const aspectScale = Math.min(1.0, Math.max(0.38, (window.innerWidth / Math.max(1, window.innerHeight)) / 1.12));
+        infinityMesh.scale.setScalar(aspectScale);
+        const dt = Math.min(clock.getDelta(), 0.05);
+        const elapsed = clock.getElapsedTime();
+
+        const LAPS_PER_CYCLE = 2.0;
+        if (cyclePhase === 0 || cyclePhase === 2) {
+          const isMobius = (cyclePhase === 2);
+          const lapProgress = Math.min(1, accelDistance / LAPS_PER_CYCLE);
+          const speed = 0.22 + Math.pow(lapProgress, 2.0) * 0.14;
+          accelDistance += dt * speed;
+
+          energyBeamMesh.visible = true;
+          const fadeIn = smoothstep(0.0, 0.22, accelDistance);
+          const fadeOut = smoothstep(0.0, 0.20, LAPS_PER_CYCLE - accelDistance);
+          const beamAlpha = Math.min(fadeIn, fadeOut);
+          beamMat.opacity = beamAlpha * 0.92;
+          beamLight.intensity = beamAlpha * 1.8;
+
+          bangCloud.visible = true;
+          bangMat.opacity = 0.52;
+          bangMat.size = 0.022;
+
+          updateInternalEnergyBeam(accelDistance, isMobius);
+
+          if (accelDistance >= LAPS_PER_CYCLE) {
+            bangProgress = 0;
+            cyclePhase = isMobius ? 3 : 1;
+            energyBeamMesh.visible = false;
+            beamMat.opacity = 0;
+            beamLight.intensity = 0;
+          }
+        } else {
+          const fromInfToMob = (cyclePhase === 1);
+          bangProgress += dt * 0.18;
+          const p = Math.min(1, bangProgress);
+
+          energyBeamMesh.visible = false;
+          beamMat.opacity = 0;
+          beamLight.intensity = 0;
+
+          const outAlpha = 1.0 - smoothstep(0.02, 0.42, p);
+          const inAlpha = smoothstep(0.58, 0.98, p);
+
+          if (fromInfToMob) {
+            infSolidMesh.visible = outAlpha > 0.005;
+            infSolidMat.opacity = outAlpha * 0.42;
+            infWireMat.opacity = outAlpha * 0.09;
+
+            mobSolidMesh.visible = inAlpha > 0.005;
+            mobSolidMat.opacity = inAlpha * 0.42;
+            mobWireMat.opacity = inAlpha * 0.09;
+          } else {
+            mobSolidMesh.visible = outAlpha > 0.005;
+            mobSolidMat.opacity = outAlpha * 0.42;
+            mobWireMat.opacity = 0.09;
+
+            infSolidMesh.visible = inAlpha > 0.005;
+            infSolidMat.opacity = inAlpha * 0.42;
+            infWireMat.opacity = inAlpha * 0.09;
+          }
+
+          const bAttr = bangGeo.attributes.position;
+          const bArr = bAttr.array;
+          const srcArr = fromInfToMob ? infPositions : mobPositions;
+          const dstArr = fromInfToMob ? mobPositions : infPositions;
+
+          for (let vIdx = 0; vIdx < VERT_COUNT; vIdx++) {
+            const u = vertU[vIdx];
+            const localP = Math.max(0, Math.min(1, (p - u * 0.32) / 0.68));
+            const blend = smoothstep(0.12, 0.88, localP);
+            const scatter = Math.pow(Math.sin(localP * Math.PI), 1.25);
+
+            const k = vIdx * 3;
+            const baseX = srcArr[k] + (dstArr[k] - srcArr[k]) * blend;
+            const baseY = srcArr[k + 1] + (dstArr[k + 1] - srcArr[k + 1]) * blend;
+            const baseZ = srcArr[k + 2] + (dstArr[k + 2] - srcArr[k + 2]) * blend;
+
+            bArr[k] = baseX + (bangOffsets[k] + bangSwirls[k] * scatter) * scatter;
+            bArr[k + 1] = baseY + (bangOffsets[k + 1] + bangSwirls[k + 1] * scatter) * scatter;
+            bArr[k + 2] = baseZ + (bangOffsets[k + 2] + bangSwirls[k + 2] * scatter) * scatter;
+          }
+          bAttr.needsUpdate = true;
+
+          const globalScatter = Math.sin(p * Math.PI);
+          bangMat.opacity = 0.52 + globalScatter * 0.16;
+          bangMat.size = 0.022 + globalScatter * 0.005;
+
+          if (bangProgress >= 1) {
+            const dstArr = fromInfToMob ? mobPositions : infPositions;
+            bAttr.array.set(dstArr);
+            bAttr.needsUpdate = true;
+            bangMat.opacity = 0.52;
+            bangMat.size = 0.022;
+            accelDistance = 0;
+
+            if (fromInfToMob) {
+              infSolidMesh.visible = false;
+              mobSolidMesh.visible = true;
+              mobSolidMat.opacity = 0.42;
+              mobWireMat.opacity = 0.09;
+              cyclePhase = 2;
+            } else {
+              mobSolidMesh.visible = false;
+              infSolidMesh.visible = true;
+              infSolidMat.opacity = 0.42;
+              infWireMat.opacity = 0.09;
+              cyclePhase = 0;
+            }
+          }
+        }
+
+        const damp = 1 - Math.exp(-4.0 * dt);
+
+        infinityMesh.rotation.x = Math.sin(elapsed * 0.55) * 0.28;
+        infinityMesh.rotation.y = Math.sin(elapsed * 0.42) * 0.32;
+        infinityMesh.rotation.z += (sectionCameraState.tiltZ - infinityMesh.rotation.z) * damp;
+
+        const targetPosX = sectionCameraState.offsetX + Math.sin(elapsed * 0.35) * 0.16;
+        const targetPosY = sectionCameraState.offsetY + Math.sin(elapsed * 1.2) * 0.07;
+        infinityMesh.position.x += (targetPosX - infinityMesh.position.x) * damp;
+        infinityMesh.position.y += (targetPosY - infinityMesh.position.y) * damp;
+        infinityMesh.position.z = 0;
+
+        targetLightColor.setHex(sectionCameraState.lightHex);
+        cyanLight.color.lerp(targetLightColor, damp);
+        cyanLight.position.x = Math.cos(elapsed * 0.7) * 4.2;
+        cyanLight.position.y = Math.sin(elapsed * 0.5) * 3.0;
+        magentaLight.position.x = Math.cos(elapsed * 0.6 + Math.PI) * 4.2;
+
+        particles.rotation.y += 0.16 * dt;
+
+        camera.position.x += (targetX - camera.position.x) * damp;
+        camera.position.y += (-targetY - camera.position.y) * damp;
+        camera.position.z += (sectionCameraState.camZ - camera.position.z) * damp;
+        camera.lookAt(0, 0, 0);
+
+        renderer.render(scene, camera);
+      }
+      animate();
+    }
+
+
+    window.addEventListener("load", () => {
+      if (typeof THREE !== "undefined") initWebGL();
+      renderStudy(0);
+      switchSubtab("simulator");
+
+      document.querySelectorAll("#subtab-bar .subtab-btn").forEach((btn) => {
+        btn.addEventListener("click", () => switchSubtab(btn.dataset.subtab));
+      });
+
+      document.getElementById("calc-copy-btn").addEventListener("click", () => {
+        const txt = document.getElementById("calc-output").textContent;
+        copyTextToClipboard(txt, "Generated calculator script copied to clipboard.");
+      });
+
+      document.getElementById("cli-copy-btn").addEventListener("click", () => {
+        copyTextToClipboard(activeMainCliCode, "CLI phase snippet copied to clipboard.");
+      });
+
+      document.getElementById("cs-copy-main-btn").addEventListener("click", () => {
+        copyTextToClipboard(activeMainCliCode, "Production configuration copied to clipboard.");
+      });
+
+      document.getElementById("prev-study-btn").addEventListener("click", () => {
+        renderStudy((activeStudyIdx - 1 + STUDIES.length) % STUDIES.length);
+      });
+
+      document.getElementById("next-study-btn").addEventListener("click", () => {
+        renderStudy((activeStudyIdx + 1) % STUDIES.length);
+      });
+
+      const simCycleBtn = document.getElementById("sim-cycle-btn");
+      if (simCycleBtn) {
+        simCycleBtn.addEventListener("click", () => {
+          if (typeof window.__cycleCurrentSim === "function") {
+            window.__cycleCurrentSim();
+          }
+        });
+      }
+
+      document.addEventListener("pointermove", (e) => {
+        document.querySelectorAll(".glass-card").forEach((card) => {
+          const rect = card.getBoundingClientRect();
+          card.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+          card.style.setProperty("--my", `${e.clientY - rect.top}px`);
+        });
+      });
+    });
+  </script>
+
+  <!-- Delayed 4-Engine Analytics Loader (GA4, Ahrefs, Clarity, Cloudflare) -->
+  <script>
+    window.addEventListener("load", function () {
+      var loaded = false;
+      function loadAnalytics() {
+        if (loaded) return;
+        loaded = true;
+        // Google Analytics 4
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () { dataLayer.push(arguments); };
+        gtag("js", new Date());
+        gtag("config", "G-8CWWDLVF2R");
+        var ga = document.createElement("script");
+        ga.async = true;
+        ga.src = "https://www.googletagmanager.com/gtag/js?id=G-8CWWDLVF2R";
+        document.head.appendChild(ga);
+
+        // Ahrefs Web Analytics
+        var ahrefs = document.createElement("script");
+        ahrefs.async = true;
+        ahrefs.src = "https://analytics.ahrefs.com/analytics.js";
+        ahrefs.setAttribute("data-key", "ANjMf+jgVWXbpHIar4BpUA");
+        document.head.appendChild(ahrefs);
+
+        // Microsoft Clarity
+        (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "zctz0j1oks");
+
+        // Cloudflare Web Analytics
+        var cf = document.createElement("script");
+        cf.type = "module";
+        cf.src = "https://static.cloudflareinsights.com/beacon.min.js";
+        cf.setAttribute("data-cf-beacon", '{"token": "4db602b719e9453c8d48262ecae5fd04"}');
+        document.body.appendChild(cf);
+      }
+      setTimeout(loadAnalytics, 4000);
+      ["pointerdown", "keydown", "scroll", "touchstart"].forEach(function (ev) {
+        window.addEventListener(ev, loadAnalytics, { once: true, passive: true });
+      });
+    });
+  </script>
+
+
+  <!-- Animated Circular Portrait + Orbiting Cyan Ring Favicon -->
+  <script>
+    (function () {
+      var prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (prefersReduced) return;
+      var c = document.createElement("canvas");
+      c.width = 64;
+      c.height = 64;
+      var ctx = c.getContext("2d");
+      if (!ctx) return;
+      var link = document.querySelector("link[rel=\"icon\"][type=\"image/png\"]") || document.createElement("link");
+      link.rel = "icon";
+      link.type = "image/png";
+      if (!link.parentNode) document.head.appendChild(link);
+
+      var img = new Image();
+      img.src = "assets/favicon.png";
+      var angle = 0;
+      var timer = null;
+
+      function drawFrame() {
+        if (document.hidden || !img.complete || !img.naturalWidth) return;
+        ctx.clearRect(0, 0, 64, 64);
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(32, 32, 27, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.drawImage(img, 0, 0, 64, 64);
+        ctx.restore();
+
+        // Subtle base cyan ring + bright orbiting arc
+        ctx.strokeStyle = "rgba(34, 211, 238, 0.35)";
+        ctx.lineWidth = 3.2;
+        ctx.beginPath();
+        ctx.arc(32, 32, 29.5, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.strokeStyle = "#22d3ee";
+        ctx.lineWidth = 3.6;
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.arc(32, 32, 29.5, angle, angle + 1.65);
+        ctx.stroke();
+
+        angle = (angle + 0.18) % (Math.PI * 2);
+        link.href = c.toDataURL("image/png");
+      }
+
+      function start() { if (!timer) { drawFrame(); timer = setInterval(drawFrame, 95); } }
+      function stop() { if (timer) { clearInterval(timer); timer = null; } }
+      document.addEventListener("visibilitychange", function () { document.hidden ? stop() : start(); });
+      img.onload = start;
+      if (img.complete) start();
+    })();
+  </script>
+
+</body>
+</html>
