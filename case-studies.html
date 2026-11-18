@@ -334,26 +334,34 @@
   <meta name="twitter:image" content="https://sakib-hosen-dev.github.io/assets/og-image.jpg?v=2" />
   <meta name="theme-color" content="#061024" />
   <style id="mobile-overscroll-fix">
-    /* Safe dark background without locking touch scrolling */
-    html, body {
-      background-color: #061024 !important;
+    /* Keep root dark & never let body paint over #webgl-canvas */
+    html {
+      background: radial-gradient(circle at 50% 22%, #0f254e 0%, #081530 55%, #061024 100%) fixed #061024 !important;
       color-scheme: dark;
       overflow-x: hidden !important;
       overflow-y: auto !important;
       touch-action: pan-y !important;
     }
     body {
-      background-image: none !important;
-      background-attachment: scroll !important;
+      background: transparent !important;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      touch-action: pan-y !important;
       padding-bottom: env(safe-area-inset-bottom, 0px);
     }
-    body::before {
-      content: "";
-      position: fixed;
-      inset: -12vh -10vw;
-      z-index: -1;
+    /* Force #webgl-canvas to positive z-index: 0 so NO browser background can EVER hide the 3D Infinity/Mobius particles! */
+    #webgl-canvas {
+      position: fixed !important;
+      inset: 0 !important;
+      z-index: 0 !important;
       pointer-events: none !important;
-      background: radial-gradient(circle at 50% 22%, #0f254e 0%, #081530 55%, #061024 100%);
+      display: block !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+    section[data-section], main {
+      position: relative !important;
+      z-index: 10 !important;
     }
     #about, #portrait-card, #about-portrait-canvas, #about-portrait-img, #webgl-canvas, #name-accelerator-canvas {
       touch-action: pan-y !important;
@@ -466,7 +474,6 @@
         background: rgba(15, 23, 42, 0.72) !important;
         border: 1px solid rgba(148, 163, 184, 0.16) !important;
       }
-      /* Odd last item (7th tab or 3rd study pill) spans full width cleanly */
       #primary-nav .nav-tab:last-of-type,
       #study-switcher .study-pill:last-of-type {
         grid-column: span 2 / span 2 !important;
@@ -565,11 +572,13 @@
 
 
 
+
+
 </head>
 <body class="antialiased selection:bg-sky-500/30 selection:text-white">
 
   <!-- Persistent Three.js 3D Infinity <-> Mobius Strip Background -->
-  <canvas id="webgl-canvas" class="fixed inset-0 -z-10 h-full w-full pointer-events-none"></canvas>
+  <canvas id="webgl-canvas" class="fixed inset-0 z-0 h-full w-full pointer-events-none"></canvas>
 
   <!-- Top Header -->
   <header class="sticky top-0 z-40 px-2.5 sm:px-6 pt-2.5 sm:pt-3.5">
