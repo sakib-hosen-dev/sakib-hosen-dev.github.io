@@ -355,59 +355,215 @@
       pointer-events: none !important;
       background: radial-gradient(circle at 50% 22%, #0f254e 0%, #081530 55%, #061024 100%);
     }
-    /* Ensure portrait & WebGL canvases never trap vertical swipe scrolling on phones/tablets */
     #about, #portrait-card, #about-portrait-canvas, #about-portrait-img, #webgl-canvas, #name-accelerator-canvas {
       touch-action: pan-y !important;
     }
 
     /* High-opacity frosted header dock so background text never bleeds through */
     .header-dock-shell {
-      background: rgba(5, 11, 26, 0.94) !important;
+      background: rgba(6, 16, 36, 0.92) !important;
       backdrop-filter: blur(26px) saturate(180%) !important;
       -webkit-backdrop-filter: blur(26px) saturate(180%) !important;
       border: 1px solid rgba(56, 189, 248, 0.28) !important;
       box-shadow: 0 20px 50px rgba(2, 6, 23, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
     }
 
-    /* Smartphone (< 680px): Balanced 2-row pill grid (4 + 3) so zero tabs are clipped or scrolled */
-    @media (max-width: 680px) {
-      #primary-nav {
+    /* Hide mobile menu buttons on desktop (>= 1221px) */
+    #mobile-menu-toggle,
+    #cs-mobile-menu-toggle {
+      display: none !important;
+    }
+
+    /* Option 1: Single-Row Header + Clean Menu Drawer across Phones & Tablets (<= 1220px) */
+    @media (max-width: 1220px) {
+      .header-dock-shell {
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        border-radius: 9999px !important;
+        padding: 0.45rem 0.75rem !important;
+        gap: 0.5rem !important;
+        position: relative !important;
+      }
+      .header-upper-row {
+        width: 100% !important;
         display: flex !important;
-        flex-wrap: wrap !important;
-        justify-content: center !important;
-        overflow-x: visible !important;
-        gap: 4px !important;
-        padding: 5px !important;
-        border-radius: 1rem !important;
-        background: rgba(3, 7, 18, 0.92) !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding: 0 !important;
+        border-bottom: none !important;
+      }
+      #mobile-menu-toggle,
+      #cs-mobile-menu-toggle {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 0.4rem !important;
+        padding: 0.42rem 0.85rem !important;
+        border-radius: 9999px !important;
+        background: rgba(15, 23, 42, 0.9) !important;
+        border: 1px solid rgba(56, 189, 248, 0.45) !important;
+        color: #f8fafc !important;
+        font-size: 11.5px !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.02em !important;
+        cursor: pointer !important;
+        box-shadow: 0 0 16px rgba(56, 189, 248, 0.16) !important;
+        transition: all 0.22s ease !important;
+      }
+      #mobile-menu-toggle[aria-expanded="true"],
+      #cs-mobile-menu-toggle[aria-expanded="true"] {
+        background: linear-gradient(135deg, #38bdf8, #6366f1) !important;
+        color: #030712 !important;
+        border-color: rgba(56, 189, 248, 0.85) !important;
+      }
+
+      /* Dropdown Glass Drawer for BOTH #primary-nav (index.html) and #study-switcher (case-studies.html) */
+      #primary-nav,
+      #study-switcher {
+        position: absolute !important;
+        top: calc(100% + 0.55rem) !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        z-index: 70 !important;
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 0.45rem !important;
+        padding: 0.65rem !important;
+        border-radius: 1.25rem !important;
+        background: rgba(6, 16, 36, 0.96) !important;
+        backdrop-filter: blur(28px) saturate(190%) !important;
+        -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+        border: 1px solid rgba(56, 189, 248, 0.32) !important;
+        box-shadow: 0 24px 54px rgba(2, 6, 23, 0.94), 0 0 24px rgba(56, 189, 248, 0.14) !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        transform: translateY(-8px) scale(0.98) !important;
+        transition: opacity 0.22s ease, transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.22s ease !important;
+      }
+      #primary-nav.mobile-drawer-open,
+      #study-switcher.mobile-drawer-open {
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        transform: translateY(0) scale(1) !important;
       }
       #nav-glider, #nav-hover-glider {
         display: none !important;
       }
-      #primary-nav .nav-tab {
-        flex: 1 1 calc(25% - 4px) !important;
-        min-width: 70px !important;
+      #primary-nav .nav-tab,
+      #study-switcher .study-pill {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
         text-align: center !important;
-        padding: 0.38rem 0.35rem !important;
-        font-size: 11px !important;
-        line-height: 1.2 !important;
-        border-radius: 0.65rem !important;
-        color: #cbd5e1 !important;
-        background: rgba(15, 23, 42, 0.55) !important;
-        border: 1px solid rgba(148, 163, 184, 0.12) !important;
+        padding: 0.6rem 0.5rem !important;
+        font-size: 12px !important;
+        font-weight: 500 !important;
+        border-radius: 0.85rem !important;
+        color: #e2e8f0 !important;
+        background: rgba(15, 23, 42, 0.72) !important;
+        border: 1px solid rgba(148, 163, 184, 0.16) !important;
       }
-      #primary-nav .nav-tab.is-active {
+      /* Odd last item (7th tab or 3rd study pill) spans full width cleanly */
+      #primary-nav .nav-tab:last-of-type,
+      #study-switcher .study-pill:last-of-type {
+        grid-column: span 2 / span 2 !important;
+      }
+      #primary-nav .nav-tab.is-active,
+      #study-switcher .study-pill.is-active {
         background: linear-gradient(135deg, #38bdf8, #6366f1) !important;
         color: #030712 !important;
         font-weight: 700 !important;
-        border-color: rgba(56, 189, 248, 0.6) !important;
-        box-shadow: 0 3px 12px rgba(56, 189, 248, 0.38) !important;
+        border-color: rgba(56, 189, 248, 0.75) !important;
+        box-shadow: 0 4px 16px rgba(56, 189, 248, 0.4) !important;
       }
       section[data-section]:not(#about) {
-        scroll-margin-top: 8.6rem !important;
+        scroll-margin-top: 4.8rem !important;
+      }
+
+      /* In-page Case Study Modal (#portal-study-tabs & #portal-subtabs) & Standalone (#subtab-bar) */
+      #portal-study-tabs {
+        width: 100% !important;
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 0.4rem !important;
+        overflow-x: visible !important;
+      }
+      #portal-study-tabs .cs-portal-pill {
+        width: 100% !important;
+        text-align: center !important;
+        justify-content: center !important;
+        padding: 0.5rem 0.45rem !important;
+        font-size: 11.5px !important;
+        border-radius: 0.8rem !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+      }
+      #portal-study-tabs .cs-portal-pill:last-child:nth-child(odd) {
+        grid-column: span 2 / span 2 !important;
+      }
+      #portal-subtabs,
+      #subtab-bar {
+        width: 100% !important;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 0.4rem !important;
+      }
+      #portal-subtabs .cs-subtab-btn,
+      #subtab-bar .subtab-btn {
+        width: 100% !important;
+        text-align: center !important;
+        justify-content: center !important;
+        padding: 0.52rem 0.65rem !important;
+        font-size: 11.5px !important;
+        border-radius: 0.8rem !important;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .header-upper-row .xl\:hidden > span:first-child {
+        display: none !important;
+      }
+    }
+
+    /* Idea B: Mobile (< 639px) Lower-Third Glass Nameplate Over Large 76dvh Portrait */
+    @media (max-width: 639px) {
+      #portrait-card {
+        height: min(76dvh, 84vw) !important;
+        max-width: 88vw !important;
+        transform: translateY(-3.5dvh) !important;
+      }
+      .about-name-wrap-left {
+        left: 50% !important;
+        right: auto !important;
+        top: auto !important;
+        bottom: calc(9.5dvh + 2.35rem) !important;
+        transform: translateX(-106%) !important;
+        z-index: 35 !important;
+      }
+      .about-name-wrap-right {
+        right: 50% !important;
+        left: auto !important;
+        top: auto !important;
+        bottom: calc(9.5dvh + 2.35rem) !important;
+        transform: translateX(106%) !important;
+        z-index: 35 !important;
+      }
+      #name-left-el, #name-right-el {
+        font-size: clamp(1.75rem, 8.2vw, 2.45rem) !important;
+        letter-spacing: 0.04em !important;
+      }
+      #name-left-el {
+        -webkit-text-stroke: 1.35px rgba(226, 232, 240, 0.95) !important;
       }
     }
   </style>
+
+
+
 
 </head>
 <body class="antialiased selection:bg-sky-500/30 selection:text-white">
@@ -435,6 +591,7 @@
 
         <div class="flex items-center gap-2 xl:hidden shrink-0">
           <span class="rounded-full bg-emerald-500/15 border border-emerald-400/35 px-2.5 py-1 font-mono-tech text-[10px] font-medium text-emerald-300 whitespace-nowrap">MTCNA &bull; MTCRE</span>
+          <button id="cs-mobile-menu-toggle" type="button" aria-expanded="false" aria-controls="study-switcher" aria-label="Toggle Case Study Labs Menu"><span class="menu-btn-icon" aria-hidden="true">☰</span><span class="menu-btn-label">Labs</span></button>
         </div>
       </div>
 
@@ -1939,6 +2096,42 @@ uci commit luci && /etc/init.d/uhttpd restart`
       document.addEventListener("visibilitychange", function () { document.hidden ? stop() : start(); });
       img.onload = start;
       if (img.complete) start();
+    })();
+  </script>
+
+
+  <script id="cs-mobile-drawer-script">
+    (function () {
+      var btn = document.getElementById("cs-mobile-menu-toggle");
+      var nav = document.getElementById("study-switcher");
+      if (!btn || !nav) return;
+      var label = btn.querySelector(".menu-btn-label");
+      var icon = btn.querySelector(".menu-btn-icon");
+      function setOpen(open) {
+        if (open) {
+          nav.classList.add("mobile-drawer-open");
+          btn.setAttribute("aria-expanded", "true");
+          if (label) label.textContent = "Close";
+          if (icon) icon.textContent = "✕";
+        } else {
+          nav.classList.remove("mobile-drawer-open");
+          btn.setAttribute("aria-expanded", "false");
+          if (label) label.textContent = "Labs";
+          if (icon) icon.textContent = "☰";
+        }
+      }
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        setOpen(!nav.classList.contains("mobile-drawer-open"));
+      });
+      nav.addEventListener("click", function (e) {
+        if (e.target.closest(".study-pill")) setOpen(false);
+      });
+      document.addEventListener("click", function (e) {
+        if (nav.classList.contains("mobile-drawer-open") && !nav.contains(e.target) && !btn.contains(e.target)) {
+          setOpen(false);
+        }
+      });
     })();
   </script>
 
