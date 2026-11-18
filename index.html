@@ -22,7 +22,7 @@
     * { box-sizing: border-box; }
 
     html, body {
-      overflow-x: clip;
+      overflow-x: hidden;
       -webkit-text-size-adjust: 100%;
     }
 
@@ -803,18 +803,18 @@
   <meta name="twitter:site" content="@iam_sakib_hosen" />
   <meta name="twitter:image" content="https://sakib-hosen-dev.github.io/assets/og-image.jpg?v=2" />
   <meta name="theme-color" content="#061024" />
-
   <style id="mobile-overscroll-fix">
-    html {
+    /* Safe dark background without locking touch scrolling */
+    html, body {
       background-color: #061024 !important;
       color-scheme: dark;
-      overscroll-behavior-y: none;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      touch-action: pan-y !important;
     }
     body {
-      background-color: #061024 !important;
       background-image: none !important;
       background-attachment: scroll !important;
-      overscroll-behavior-y: none;
       padding-bottom: env(safe-area-inset-bottom, 0px);
     }
     body::before {
@@ -822,10 +822,63 @@
       position: fixed;
       inset: -12vh -10vw;
       z-index: -1;
-      pointer-events: none;
+      pointer-events: none !important;
       background: radial-gradient(circle at 50% 22%, #0f254e 0%, #081530 55%, #061024 100%);
     }
+    /* Ensure portrait & WebGL canvases never trap vertical swipe scrolling on phones/tablets */
+    #about, #portrait-card, #about-portrait-canvas, #about-portrait-img, #webgl-canvas, #name-accelerator-canvas {
+      touch-action: pan-y !important;
+    }
+
+    /* High-opacity frosted header dock so background text never bleeds through */
+    .header-dock-shell {
+      background: rgba(5, 11, 26, 0.94) !important;
+      backdrop-filter: blur(26px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(26px) saturate(180%) !important;
+      border: 1px solid rgba(56, 189, 248, 0.28) !important;
+      box-shadow: 0 20px 50px rgba(2, 6, 23, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    }
+
+    /* Smartphone (< 680px): Balanced 2-row pill grid (4 + 3) so zero tabs are clipped or scrolled */
+    @media (max-width: 680px) {
+      #primary-nav {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        overflow-x: visible !important;
+        gap: 4px !important;
+        padding: 5px !important;
+        border-radius: 1rem !important;
+        background: rgba(3, 7, 18, 0.92) !important;
+      }
+      #nav-glider, #nav-hover-glider {
+        display: none !important;
+      }
+      #primary-nav .nav-tab {
+        flex: 1 1 calc(25% - 4px) !important;
+        min-width: 70px !important;
+        text-align: center !important;
+        padding: 0.38rem 0.35rem !important;
+        font-size: 11px !important;
+        line-height: 1.2 !important;
+        border-radius: 0.65rem !important;
+        color: #cbd5e1 !important;
+        background: rgba(15, 23, 42, 0.55) !important;
+        border: 1px solid rgba(148, 163, 184, 0.12) !important;
+      }
+      #primary-nav .nav-tab.is-active {
+        background: linear-gradient(135deg, #38bdf8, #6366f1) !important;
+        color: #030712 !important;
+        font-weight: 700 !important;
+        border-color: rgba(56, 189, 248, 0.6) !important;
+        box-shadow: 0 3px 12px rgba(56, 189, 248, 0.38) !important;
+      }
+      section[data-section]:not(#about) {
+        scroll-margin-top: 8.6rem !important;
+      }
+    }
   </style>
+
 </head>
 <body class="antialiased selection:bg-sky-500/30 selection:text-white">
 
