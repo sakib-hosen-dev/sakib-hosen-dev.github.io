@@ -2,7 +2,7 @@
 <html lang="en" class="dark scroll-smooth">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Sakib Hosen Case Studies — MikroTik RouterOS v7 & OpenWrt 25</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -332,6 +332,30 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@iam_sakib_hosen" />
   <meta name="twitter:image" content="https://sakib-hosen-dev.github.io/assets/og-image.jpg?v=2" />
+  <meta name="theme-color" content="#061024" />
+
+  <style id="mobile-overscroll-fix">
+    html {
+      background-color: #061024 !important;
+      color-scheme: dark;
+      overscroll-behavior-y: none;
+    }
+    body {
+      background-color: #061024 !important;
+      background-image: none !important;
+      background-attachment: scroll !important;
+      overscroll-behavior-y: none;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -12vh -10vw;
+      z-index: -1;
+      pointer-events: none;
+      background: radial-gradient(circle at 50% 22%, #0f254e 0%, #081530 55%, #061024 100%);
+    }
+  </style>
 </head>
 <body class="antialiased selection:bg-sky-500/30 selection:text-white">
 
